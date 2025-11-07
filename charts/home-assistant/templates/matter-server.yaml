@@ -1,0 +1,68 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: matter-server-data
+  namespace: home-assistant
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: matter-server
+  namespace: home-assistant
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: matter-server
+  template:
+    metadata:
+      labels:
+        app: matter-server
+    spec:
+      hostNetwork: true
+      hostPID: true
+      containers:
+        - name: matter-server
+          image: ghcr.io/home-assistant-libs/python-matter-server:stable
+          args:
+            - --storage-path
+            - /data
+            - --paa-root-cert-dir
+            - /data/credentials
+            # - --bluetooth-adapter
+            # - "1"
+          ports:
+            - containerPort: 5580
+          volumeMounts:
+            - name: data
+              mountPath: /data
+            # - name: dbus
+            #   mountPath: /run/dbus
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: matter-server-data
+        # - name: dbus
+        #   hostPath:
+        #     path: /run/dbus
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: matter-server-service
+  namespace: home-assistant
+spec:
+  type: ClusterIP
+  selector:
+    app: matter-server
+  ports:
+    - name: websocket
+      protocol: TCP
+      port: 80
+      targetPort: 5580

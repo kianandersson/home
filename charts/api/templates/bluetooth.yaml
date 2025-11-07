@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: bluetooth-test
+  namespace: api
+spec:
+  restartPolicy: Never
+  containers:
+    - name: test
+      image: alpine:3.20
+      securityContext:
+        privileged: true
+      command: ["sh", "-lc"]
+      args:
+        - >
+          apk add --no-cache bluez dbus &&
+          echo "Scanner i 5 sek..." &&
+          bluetoothctl --timeout 5 scan on
+      volumeMounts:
+        - name: dbus
+          mountPath: /run/dbus/system_bus_socket
+  volumes:
+    - name: dbus
+      hostPath:
+        path: /run/dbus/system_bus_socket
+        type: Socket

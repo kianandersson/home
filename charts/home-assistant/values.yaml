@@ -1,0 +1,7 @@
+mqtt:
+  user:
+  password:
+
+mosquitto:
+  user:
+  passwordHash:
