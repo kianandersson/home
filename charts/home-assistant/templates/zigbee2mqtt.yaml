@@ -17,7 +17,19 @@ metadata:
   namespace: home-assistant
 data:
   configuration.yaml: |
-    {{ (.Files.Get "homeassistant/configuration.yaml") | indent 4 }}
+    homeassistant: true
+    permit_join: false
+
+    mqtt:
+      server: mqtt://mosquitto-service.home-assistant.svc.cluster.local:8883
+      user: "{{ .Values.mqtt.user }}"
+      password: "{{ .Values.mqtt.password }}"
+
+    serial:
+      port: /dev/ttyACM0
+
+    frontend:
+      port: 8080
 ---
 apiVersion: apps/v1
 kind: Deployment

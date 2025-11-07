@@ -24,7 +24,7 @@ metadata:
   namespace: home-assistant
 data:
   configuration.yaml: |-
-    {{ (.Files.Get "homeassistant/configuration.yaml") | indent 4 }}
+{{ (.Files.Get "files/home-assistant/configuration.yaml") | indent 4 }}
 ---
 apiVersion: apps/v1
 kind: Deployment
