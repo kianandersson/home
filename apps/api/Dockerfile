@@ -16,6 +16,7 @@ COPY --from=tesla-control /usr/local/bin/tesla-control /usr/local/bin/tesla-cont
 
 WORKDIR /app
 
+COPY .env .
 COPY deno.json .
 COPY deno.lock .
 COPY keys keys
@@ -24,4 +25,4 @@ COPY main.ts .
 
 RUN deno cache main.ts
 
-ENTRYPOINT ["deno", "run", "--allow-run", "--allow-net", "--allow-read", "main.ts"]
+ENTRYPOINT ["deno", "run", "--allow-run", "--allow-net", "--allow-read", "--allow-env", "main.ts"]

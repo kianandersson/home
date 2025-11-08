@@ -1,11 +1,12 @@
 deploy:
-	helm upgrade --install ingress charts/ingress -n ingress --atomic --cleanup-on-fail \
+	helm upgrade --install ingress charts/ingress -n ingress \
 		-f values/ingress/values.yaml \
 		-f values/ingress/values.secrets.yaml
 	
-	helm upgrade --install api charts/api -n api --atomic --cleanup-on-fail
+	helm upgrade --install api charts/api -n api \
+		-f values/api/values.secrets.yaml
 
-	helm upgrade --install home-assistant charts/home-assistant -n home-assistant --atomic --cleanup-on-fail \
+	helm upgrade --install home-assistant charts/home-assistant -n home-assistant \
 		-f values/home-assistant/values.secrets.yaml
 
 diff:
@@ -13,9 +14,10 @@ diff:
 		-f values/ingress/values.yaml \
 		-f values/ingress/values.secrets.yaml
 
-	helm diff upgrade api charts/api -n api
+	helm diff upgrade api charts/api -n api \
+		-f values/api/values.secrets.yaml
 
-	helm diff upgrade home-assistant charts/home-assistant -n home-assistant --allow-unreleased \
+	helm diff upgrade home-assistant charts/home-assistant -n home-assistant \
 		-f values/home-assistant/values.secrets.yaml
 
 download-certificates:

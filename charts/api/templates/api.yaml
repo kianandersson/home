@@ -3,6 +3,14 @@ kind: Namespace
 metadata:
   name: api
 ---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: ghcr-secret
+type: kubernetes.io/dockerconfigjson
+data:
+  .dockerconfigjson: {{ printf "{\"auths\":{\"%s\":{\"username\":\"%s\",\"password\":\"%s\",\"auth\":\"%s\"}}}" .Values.ghcr.server .Values.ghcr.username .Values.ghcr.password (printf "%s:%s" .Values.ghcr.username .Values.ghcr.password | b64enc) | b64enc }}
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -10,6 +18,11 @@ metadata:
   namespace: api
 spec:
   replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
   selector:
     matchLabels:
       app: api
@@ -18,11 +31,23 @@ spec:
       labels:
         app: api
     spec:
+      hostNetwork: true
+      imagePullSecrets:
+        - name: ghcr-secret
       containers:
-        - name: nginx-container
-          image: nginx:latest
+        - name: application
+          image: ghcr.io/kianandersson/api:17
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - name: dbus
+              mountPath: /run/dbus
           ports:
-            - containerPort: 80
+            - containerPort: 3000
+      volumes:
+        - name: dbus
+          hostPath:
+            path: /run/dbus
 ---
 apiVersion: v1
 kind: Service
@@ -36,7 +61,7 @@ spec:
   ports:
     - protocol: TCP
       port: 80
-      targetPort: 80
+      targetPort: 3000
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress

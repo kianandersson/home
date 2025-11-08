@@ -1,3 +1,4 @@
+import z from "zod";
 import { TeslaVehicle } from "./TeslaVehicle.ts";
 
 export class TeslaVehicleController {
@@ -42,7 +43,15 @@ export class TeslaVehicleController {
 
     const { stdout } = await process.output();
 
-    return new TextDecoder().decode(stdout);
+    try {
+      const decoded = new TextDecoder().decode(stdout);
+
+      return z.object({}).loose().parse(JSON.parse(decoded));
+    } catch (error) {
+      throw new Error("Failed to decode vehicle state output", {
+        cause: error,
+      });
+    }
   }
 
   private async exec(vehicle: TeslaVehicle, args: string[]) {
@@ -51,8 +60,8 @@ export class TeslaVehicleController {
 
     const process = new Deno.Command(binaryPath, {
       args: ["-ble", "-vin", vin, ...args],
-      stdout: "null",
-      stderr: "null",
+      stdout: "piped",
+      stderr: "piped",
     }).spawn();
 
     const { success } = await process.status;

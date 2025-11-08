@@ -30,9 +30,7 @@ export class TeslaWallConnectorStateResolver {
     const { vehicle_connected: connected } =
       teslaWallConnectorVitalsSchema.parse(await response.json());
 
-    return new TeslaWallConnectorState({
-      connected: connected || Math.random() < 0.5,
-    });
+    return new TeslaWallConnectorState({ connected });
   }
 
   public async *watch({
