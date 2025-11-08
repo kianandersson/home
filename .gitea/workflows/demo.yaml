@@ -6,6 +6,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     container: ghcr.io/catthehacker/ubuntu:act-latest
+    env: 
+      DOCKER_HOST: unix:///run/user/1000/docker.sock
     steps:
       - uses: actions/checkout@v4
       - name: Sanity
