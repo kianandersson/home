@@ -4,9 +4,3 @@ giteaRootURL: https://gitea.anderssonfischer.com
 
 existingSecret: "gitea-actions-token"
 existingSecretKey: "token"
-
-statefulset:
-  actRunner:
-    extraEnvs:
-      - name: DOCKER_HOST
-        value: unix:///var/run/user/1000/docker.sock
