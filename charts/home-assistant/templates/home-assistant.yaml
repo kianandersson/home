@@ -82,10 +82,7 @@ kind: Ingress
 metadata:
   name: home-assistant-ingress-public
   namespace: home-assistant
-  annotations:
-    traefik.ingress.kubernetes.io/router.entrypoints: websecure
 spec:
-  ingressClassName: traefik
   rules:
     - host: ha.anderssonfischer.com
       http:

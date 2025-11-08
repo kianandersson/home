@@ -68,10 +68,7 @@ kind: Ingress
 metadata:
   name: api-ingress-public
   namespace: api
-  annotations:
-    traefik.ingress.kubernetes.io/router.entrypoints: websecure
 spec:
-  ingressClassName: traefik
   rules:
     - host: api.anderssonfischer.com
       http:
