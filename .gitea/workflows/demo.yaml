@@ -4,9 +4,10 @@ on: [push]
 
 jobs:
   build:
-    name: Build image
     runs-on: ubuntu-latest
-    env:
-      DOCKER_HOST: tcp://127.0.0.1:2376
+    container: ghcr.io/catthehacker/ubuntu:act-latest
     steps:
+      - uses: actions/checkout@v4
+      - name: Sanity
+        run: docker info
       - run: docker build apps/api -t gitea.anderssonfischer.com/kianandersson/api:latest
