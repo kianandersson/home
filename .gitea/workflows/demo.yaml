@@ -6,8 +6,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     container: ghcr.io/catthehacker/ubuntu:act-latest
-    env: 
-      DOCKER_HOST: tcp://localhost:2376
     steps:
       - name: Sanity
         run: docker info
