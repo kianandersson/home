@@ -4,9 +4,3 @@ giteaRootURL: https://gitea.anderssonfischer.com
 
 existingSecret: "gitea-actions-token"
 existingSecretKey: "token"
-
-statefulset:
-  actRunner:
-    config: |
-      runner:
-        insecure: true
