@@ -6,8 +6,7 @@ jobs:
   build:
     name: Build image
     runs-on: ubuntu-latest
-    container: ghcr.io/catthehacker/ubuntu:act-latest
     env:
-      DOCKER_HOST: tcp://127.0.0.1:2376
+      DOCKER_HOST: tcp://0.0.0.0:2376
     steps:
       - run: docker build apps/api -t gitea.anderssonfischer.com/kianandersson/api:latest
