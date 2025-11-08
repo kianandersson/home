@@ -7,6 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GIT_SSL_NO_VERIFY: true
+      DOCKER_TLS_VERIFY: 0
     steps:
       - name: Log in to the Container registry
         uses: docker/login-action@v2
