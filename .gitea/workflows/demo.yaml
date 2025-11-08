@@ -7,9 +7,9 @@ jobs:
     runs-on: ubuntu-latest
     container: ghcr.io/catthehacker/ubuntu:act-latest
     env: 
-      DOCKER_HOST: unix:///run/user/1000/docker.sock
+      DOCKER_HOST: tcp://localhost:2376
     steps:
-      - uses: actions/checkout@v4
       - name: Sanity
         run: docker info
+      - uses: actions/checkout@v4
       - run: docker build apps/api -t gitea.anderssonfischer.com/kianandersson/api:latest
