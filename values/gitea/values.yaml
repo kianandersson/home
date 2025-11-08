@@ -15,9 +15,6 @@ postgresql:
 postgresql-ha:
   enabled: false
 
-persistence:
-  enabled: false
-
 gitea:
   config:
     database:
@@ -30,3 +27,6 @@ gitea:
       TYPE: level
     service:
       DISABLE_REGISTRATION: true
+    server:
+      SSH_DOMAIN: gitea.anderssonfischer.local
+      SSH_PORT: 2222

@@ -120,6 +120,14 @@ metadata:
   namespace: kube-system
 spec:
   valuesContent: |-
+    ports:
+      ssh:
+        port: 22
+        expose:
+          default: true 
+        exposedPort: 2222
+        protocol: TCP
+
     volumes:
       - name: tls-public
         mountPath: /certs-public
@@ -134,3 +142,17 @@ spec:
       - --providers.file.filename=/config/dynamic.yaml
       - --entrypoints.web.http.redirections.entryPoint.to=:443
       - --entrypoints.web.http.redirections.entrypoint.scheme=https
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRouteTCP
+metadata:
+  name: gitea-ssh
+  namespace: gitea
+spec:
+  entryPoints:
+    - ssh
+  routes:
+    - match: HostSNI(`*`)
+      services:
+        - name: gitea-ssh
+          port: 22
