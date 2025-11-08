@@ -5,10 +5,8 @@ on: [push]
 jobs:
   Explore-Gitea-Actions:
     runs-on: ubuntu-latest
-    env: 
-      TEST: ${{ secrets.GITEA_TOKEN }}
     steps:
-      - run: docker login gitea.example.com
+      - run:  echo "${{ secrets.GITEA_TOKEN }}" | docker login gitea.example.com -u ${{ gitea.actor }} --password-stdin
       - name: Log in to the Container registry
         uses: docker/login-action@v2
         with:
