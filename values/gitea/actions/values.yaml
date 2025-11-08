@@ -1,0 +1,12 @@
+enabled: true
+
+giteaRootURL: https://gitea.anderssonfischer.local
+
+existingSecret: "gitea-actions-token"
+existingSecretKey: "token"
+
+statefulset:
+  actRunner:
+    config: |
+      runner:
+        insecure: true

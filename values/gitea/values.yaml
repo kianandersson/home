@@ -28,5 +28,6 @@ gitea:
     service:
       DISABLE_REGISTRATION: true
     server:
+      ROOT_URL: https://gitea.anderssonfischer.local/
       SSH_DOMAIN: gitea.anderssonfischer.local
       SSH_PORT: 2222
