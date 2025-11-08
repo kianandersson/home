@@ -6,7 +6,7 @@ jobs:
   Explore-Gitea-Actions:
     runs-on: ubuntu-latest
     steps:
-      - run: docker build docker build apps/api -t gitea.anderssonfischer.com/kianandersson/api:latest
+      - run: docker build apps/api -t gitea.anderssonfischer.com/kianandersson/api:latest
       - run: docker push gitea.anderssonfischer.com/kianandersson/api:latest
       - run:  echo "${{ secrets.GITEA_TOKEN }}" | docker login gitea.anderssonfischer.com -u kianandersson --password-stdin
       - name: Log in to the Container registry
