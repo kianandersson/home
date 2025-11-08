@@ -9,11 +9,8 @@ statefulset:
   actRunner:
     extraEnvs:
       - name: DOCKER_HOST
-        value: tcp://127.0.0.1:2375
-  dind:
-    extraEnvs:
-      - name: DOCKER_TLS_CERTDIR
-        value: ""
-    extraArgs:
-      - "--host=tcp://0.0.0.0:2375"
-      - "--host=unix:///var/run/docker.sock"
+        value: tcp://localhost:2376
+      - name: DOCKER_CERT_PATH
+        value: /certs/client
+      - name: DOCKER_TLS_VERIFY
+        value: "1"
