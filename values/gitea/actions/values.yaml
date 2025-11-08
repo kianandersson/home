@@ -1,6 +1,6 @@
 enabled: true
 
-giteaRootURL: https://gitea.anderssonfischer.local
+giteaRootURL: https://gitea.anderssonfischer.com
 
 existingSecret: "gitea-actions-token"
 existingSecretKey: "token"

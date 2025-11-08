@@ -1,7 +1,7 @@
 ingress:
   enabled: true
   hosts:
-    - host: gitea.anderssonfischer.local
+    - host: gitea.anderssonfischer.com
       paths:
         - path: /
           pathType: Prefix
@@ -28,6 +28,6 @@ gitea:
     service:
       DISABLE_REGISTRATION: true
     server:
-      ROOT_URL: https://gitea.anderssonfischer.local/
-      SSH_DOMAIN: gitea.anderssonfischer.local
+      ROOT_URL: https://gitea.anderssonfischer.com/
+      SSH_DOMAIN: gitea.anderssonfischer.com
       SSH_PORT: 2222
