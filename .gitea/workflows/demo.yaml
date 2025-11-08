@@ -8,7 +8,7 @@ jobs:
     env: 
       TEST: ${{ secrets.GITEA_TOKEN }}
     steps:
-      - run: echo ${#TEST}
+      - run: docker login gitea.example.com
       - name: Log in to the Container registry
         uses: docker/login-action@v2
         with:
