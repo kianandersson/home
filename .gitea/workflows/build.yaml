@@ -8,7 +8,7 @@ jobs:
     container: ghcr.io/catthehacker/ubuntu:act-latest
     steps:
       - name: Debug 1
-        run: curl -v -4 --tlsv1.2 --http1.1 --connect-timeout 10 https://get.helm.sh/index.yaml
+        run: curl -vI https://get.helm.sh/helm-v3.16.1-linux-arm64.tar.gz
       - name: Debug 2
         run: |
           apt-get update
