@@ -13,7 +13,7 @@ jobs:
           mkdir -p $HOME/.kube
           echo "${{ secrets.KUBECONFIG }}" > $HOME/.kube/config
       - name: Test
-        run: helm list
+        run: helm list -n api
       - name: Login to registry
         uses: docker/login-action@v3
         with:
@@ -50,4 +50,3 @@ jobs:
             --set registry.username="${{ secrets.REGISTRY_USERNAME }}"
             --set registry.password="${{ secrets.REGISTRY_READ_TOKEN }}"
             --set application.image=gitea.anderssonfischer.com/kianandersson/api:${{ gitea.sha }}
-
