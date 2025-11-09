@@ -117,7 +117,14 @@ jobs:
           echo "${{ secrets.KUBECONFIG }}" > $HOME/.kube/config
 
       - name: Validate changes
+        env:
+          MOSQUITTO_USERNAME: "${{ secrets.MOSQUITTO_USERNAME }}"
+          MOSQUITTO_PASSWORD: "${{ secrets.MOSQUITTO_PASSWORD }}"
+          MOSQUITTO_PASSWORD_HASH: "${{ secrets.MOSQUITTO_PASSWORD_HASH }}"
         run: |
+          echo ${#MOSQUITTO_USERNAME}
+          echo ${#MOSQUITTO_PASSWORD}
+          echo ${#MOSQUITTO_PASSWORD_HASH}
           helm diff upgrade home-assistant charts/home-assistant -n home-assistant \
             --set mosquitto.username="${{ secrets.MOSQUITTO_USERNAME }}" \
             --set mosquitto.password="${{ secrets.MOSQUITTO_PASSWORD }}" \
