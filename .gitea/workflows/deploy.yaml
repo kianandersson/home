@@ -29,15 +29,15 @@ jobs:
             --set simply.accountName="$SIMPLY_ACCOUNT_NAME" \
             --set simply.apiKey="$SIMPLY_API_KEY"
 
-      # - name: Deploy changes
-      #   env:
-      #     SIMPLY_ACCOUNT_NAME: "${{ secrets.SIMPLY_ACCOUNT_NAME }}"
-      #     SIMPLY_API_KEY: "${{ secrets.SIMPLY_API_KEY }}"
-      #   run: |
-      #     helm upgrade --install infra charts/infra -n infra \
-      #       -f values/infra/values.yaml \
-      #       --set simply.accountName="$SIMPLY_ACCOUNT_NAME" \
-      #       --set simply.apiKey="$SIMPLY_API_KEY"
+      - name: Deploy changes
+        env:
+          SIMPLY_ACCOUNT_NAME: "${{ secrets.SIMPLY_ACCOUNT_NAME }}"
+          SIMPLY_API_KEY: "${{ secrets.SIMPLY_API_KEY }}"
+        run: |
+          helm upgrade --install infra charts/infra -n infra \
+            -f values/infra/values.yaml \
+            --set simply.accountName="$SIMPLY_ACCOUNT_NAME" \
+            --set simply.apiKey="$SIMPLY_API_KEY"
 
   build-api:
     name: Build and publish api image
@@ -108,18 +108,18 @@ jobs:
             --set registry.password="$REGISTRY_READ_TOKEN" \
             --set application.image=${{ needs.build-api.outputs.image }}
 
-      # - name: Deploy changes
-      #   env:
-      #     REGISTRY_USERNAME: "${{ secrets.REGISTRY_USERNAME }}"
-      #     REGISTRY_READ_TOKEN: "${{ secrets.REGISTRY_READ_TOKEN }}"
-      #   run: |
-      #     helm upgrade --install api charts/api -n api \
-      #       -f values/api/values.yaml \
-      #       --set-file keys.private=./keys/private.pem \
-      #       --set-file keys.public=./keys/public.pem \
-      #       --set registry.username="$REGISTRY_USERNAME" \
-      #       --set registry.password="$REGISTRY_READ_TOKEN" \
-      #       --set application.image=${{ needs.build-api.outputs.image }}
+      - name: Deploy changes
+        env:
+          REGISTRY_USERNAME: "${{ secrets.REGISTRY_USERNAME }}"
+          REGISTRY_READ_TOKEN: "${{ secrets.REGISTRY_READ_TOKEN }}"
+        run: |
+          helm upgrade --install api charts/api -n api \
+            -f values/api/values.yaml \
+            --set-file keys.private=./keys/private.pem \
+            --set-file keys.public=./keys/public.pem \
+            --set registry.username="$REGISTRY_USERNAME" \
+            --set registry.password="$REGISTRY_READ_TOKEN" \
+            --set application.image=${{ needs.build-api.outputs.image }}
 
   deploy-home-assistant:
     name: Deploy home assistant release
@@ -148,9 +148,9 @@ jobs:
             --set mosquitto.password="$MOSQUITTO_PASSWORD" \
             --set mosquitto.passwordHash="$MOSQUITTO_PASSWORD_HASH"
 
-      # - name: Deploy changes
-      #   run: |
-      #     helm upgrade --install home-assistant charts/home-assistant -n home-assistant \
-      #       --set mosquitto.username="$MOSQUITTO_USERNAME" \
-      #       --set mosquitto.password="$MOSQUITTO_PASSWORD" \
-      #       --set mosquitto.passwordHash="$MOSQUITTO_PASSWORD_HASH"
+      - name: Deploy changes
+        run: |
+          helm upgrade --install home-assistant charts/home-assistant -n home-assistant \
+            --set mosquitto.username="$MOSQUITTO_USERNAME" \
+            --set mosquitto.password="$MOSQUITTO_PASSWORD" \
+            --set mosquitto.passwordHash="$MOSQUITTO_PASSWORD_HASH"
