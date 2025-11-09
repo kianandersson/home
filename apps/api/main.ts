@@ -18,6 +18,8 @@ try {
   // do nothing
 }
 
+console.log("Hej Bobber!");
+
 function run() {
   const binaryPath = Deno.env.get("TESLA_CONTROL_BINARY_PATH");
 
