@@ -27,10 +27,13 @@ jobs:
           mkdir -p $HOME/.kube
           echo "${{ secrets.KUBECONFIG }}" > $HOME/.kube/config
       - name: Prepare keys
+        env:
+          PUBLIC_KEY: ${{ secrets.PUBLIC_KEY }}
+          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
         run: |
           mkdir -p keys
-          echo "${{ secrets.PUBLIC_KEY }}" > keys/public.pem
-          echo "${{ secrets.PRIVATE_KEY }}" > keys/private.pem
+          echo "${PUBLIC_KEY}" > keys/public.pem
+          echo "${PRIVATE_KEY}" > keys/private.pem
           cat keys/public.pem
       - name: Deploy
         # run: |
@@ -42,6 +45,7 @@ jobs:
         #     --set registry.password="${{ secrets.REGISTRY_READ_TOKEN }}" \
         #     --set application.image=gitea.anderssonfischer.com/kianandersson/api:${{ gitea.sha }}
         run: |
+          cat keys/public.pem
           helm diff upgrade api charts/api -n api \
             -f values/api/values.yaml \
             --set-file keys.private=keys/private.pem \
