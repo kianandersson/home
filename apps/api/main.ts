@@ -12,8 +12,6 @@ import {
   type Subscription,
 } from "./src/index.ts";
 
-console.log("NEW RELEASE!!!");
-
 try {
   await load({ export: true });
 } catch {
