@@ -18,7 +18,7 @@ metadata:
   namespace: api
 data:
   local.crt: |-
-{{ .Values.certificates.local | nindent 4 }}
+{{- .Values.certificates.local | nindent 4 }}
 ---
 apiVersion: v1
 kind: Secret
