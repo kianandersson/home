@@ -40,7 +40,7 @@ jobs:
             --set simply.apiKey="$SIMPLY_API_KEY"
 
   build-api:
-    name: Build and publish api image
+    name: Build and push api image
     runs-on: ubuntu-latest
     container:
       image: gitea.anderssonfischer.com/kianandersson/runner:3
@@ -98,7 +98,7 @@ jobs:
       - name: Prepare certificates
         run: |
           mkdir -p certs
-          kubectl get secret local-root-ca-keypair -n cert-manager -o jsonpath='{.data.tls\.crt}' | base64 --decode | sed '/^$/d' > certs/local.crt
+          kubectl get secret local-root-ca-keypair -n cert-manager -o jsonpath='{.data.tls\.crt}' | base64 --decode > certs/local.crt
 
       - name: Validate changes
         env:

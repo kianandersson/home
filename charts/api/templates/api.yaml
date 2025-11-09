@@ -18,7 +18,7 @@ metadata:
   namespace: api
 data:
   local.crt: |
-{{ .Values.certificates.local | nindent 4 }}
+{{ .Values.certificates.local | trim | nindent 4 }}
 ---
 apiVersion: v1
 kind: Secret
@@ -27,9 +27,9 @@ metadata:
 type: Opaque
 stringData:
   private.pem: |
-{{ .Values.keys.private | nindent 4 }}
+{{ .Values.keys.private | trim | nindent 4 }}
   public.pem: |
-{{ .Values.keys.public | nindent 4 }}
+{{ .Values.keys.public | trim | nindent 4 }}
 ---
 apiVersion: apps/v1
 kind: Deployment
