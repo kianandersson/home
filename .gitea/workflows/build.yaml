@@ -13,6 +13,10 @@ jobs:
           registry: gitea.anderssonfischer.com
           username: ${{ secrets.REGISTRY_USERNAME }}
           password: ${{ secrets.REGISTRY_WRITE_TOKEN }}
+      - name: Install kubectl
+        uses: azure/setup-kubectl@v3
+      - name: Install helm
+        uses: azure/setup-helm@v1
       - name: Checkout
         uses: actions/checkout@v5
       - name: Build and push
