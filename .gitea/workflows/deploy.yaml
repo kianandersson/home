@@ -1,9 +1,8 @@
-name: Gitea Actions Demo
-run-name: ${{ gitea.actor }} is testing out Gitea Actions 🚀
+name: Deploy
 on: [push]
-
 jobs:
-  build:
+  deploy-api:
+    name: Deploy API
     runs-on: ubuntu-latest
     container:
       image: gitea.anderssonfischer.com/kianandersson/runner:2
