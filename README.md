@@ -29,6 +29,10 @@ sudo systemctl start bluetooth
 curl -sfL https://get.k3s.io | K3S_URL=https://home.anderssonfischer.com:6443 sh -
 ```
 
+### Recover persistent volumes
+
+TBD...
+
 ### Add Helm chart repositories
 
 ```sh
@@ -85,4 +89,20 @@ helm upgrade --install gitea-actions gitea-charts/actions \
 helm upgrade --install rbac ./charts/rbac \
   --create-namespace \
   --namespace rbac
+```
+
+### Configure Gitea
+
+TBD...
+
+### Add local origin
+
+```sh
+git remote add origin ssh://git@gitea.anderssonfischer.com:2222/kianandersson/home.git
+```
+
+### Trigger a deploy
+
+```sh
+git commit --allow-empty -m "chore: deploy"
 ```
