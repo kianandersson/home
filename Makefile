@@ -31,3 +31,11 @@ diff:
 download-certificates:
 	mkdir -p certs
 	kubectl get secret local-root-ca-keypair -n cert-manager -o jsonpath='{.data.tls\.crt}' | base64 --decode > certs/anderssonfischer-local-root.crt
+
+build-runner:
+	docker buildx create --use --name ci-builder
+	docker buildx build \
+		--platform linux/amd64,linux/arm64 \
+		-t gitea.anderssonfischer.com/kianandersson/runner:1 \
+		--push \
+		apps/runner
