@@ -22,13 +22,9 @@ jobs:
           context: apps/api
           tags: gitea.anderssonfischer.com/kianandersson/api:${{ gitea.sha }}
       - name: Install kubectl
-        uses: azure/setup-kubectl@v3
-        with:
-          version: v1.34.1
+        uses: azure/setup-kubectl@v4
       - name: Install helm
-        uses: azure/setup-helm@v1
-        with:
-          version: v3.18.3
+        uses: azure/setup-helm@v4
       - name: Prepare keys
         run: |
           mkdir -p keys
