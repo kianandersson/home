@@ -8,16 +8,6 @@ jobs:
     container:
       image: gitea.anderssonfischer.com/kianandersson/runner:2
     steps:
-      - name: Debug PUBLIC_KEY length
-        env:
-          PUBLIC_KEY: ${{ secrets.PUBLIC_KEY }}
-        run: echo "Len ${#PUBLIC_KEY}"
-      - name: Prepare keys
-        run: |
-          mkdir -p keys
-          echo "${{ secrets.PUBLIC_KEY }}" > keys/public.pem
-          echo "${{ secrets.PRIVATE_KEY }}" > keys/private.pem
-          cat keys/public.pem
       - name: Login to registry
         uses: docker/login-action@v3
         with:
@@ -36,6 +26,11 @@ jobs:
         run: |
           mkdir -p $HOME/.kube
           echo "${{ secrets.KUBECONFIG }}" > $HOME/.kube/config
+      - name: Prepare keys
+        run: |
+          mkdir -p keys
+          echo "${{ secrets.API_PRIVATE_KEY }}" > keys/public.pem
+          echo "${{ secrets.API_PRIVATE_KEY }}" > keys/private.pem
       - name: Deploy
         # run: |
         #   helm upgrade --install api charts/api -n api \
