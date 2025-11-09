@@ -123,6 +123,7 @@ jobs:
             -f values/api/values.yaml \
             --set-file keys.private=./keys/private.pem \
             --set-file keys.public=./keys/public.pem \
+            --set-file certificates.local=certs/local.crt \
             --set registry.username="$REGISTRY_USERNAME" \
             --set registry.password="$REGISTRY_READ_TOKEN" \
             --set application.image=${{ needs.build-api.outputs.image }}
