@@ -9,7 +9,7 @@ statefulset:
   actRunner:
     config: |
       runner:
-        capacity: 1
+        capacity: 5
       container:
         valid_volumes:
           - /var/run/docker.sock
