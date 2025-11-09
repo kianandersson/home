@@ -37,14 +37,14 @@ jobs:
         #     -f values/api/values.yaml \
         #     --set-file keys.private=./keys/private.pem \
         #     --set-file keys.public=./keys/public.pem \
-        #     --set registry.username="${{ secrets.REGISTRY_USERNAME }}"
-        #     --set registry.password="${{ secrets.REGISTRY_READ_TOKEN }}"
+        #     --set registry.username="${{ secrets.REGISTRY_USERNAME }}" \
+        #     --set registry.password="${{ secrets.REGISTRY_READ_TOKEN }}" \
         #     --set application.image=gitea.anderssonfischer.com/kianandersson/api:${{ gitea.sha }}
         run: |
           helm diff upgrade api charts/api -n api \
             -f values/api/values.yaml \
             --set-file keys.private=./keys/private.pem \
             --set-file keys.public=./keys/public.pem \
-            --set registry.username="${{ secrets.REGISTRY_USERNAME }}"
-            --set registry.password="${{ secrets.REGISTRY_READ_TOKEN }}"
+            --set registry.username="${{ secrets.REGISTRY_USERNAME }}" \
+            --set registry.password="${{ secrets.REGISTRY_READ_TOKEN }}" \
             --set application.image=gitea.anderssonfischer.com/kianandersson/api:${{ gitea.sha }}
