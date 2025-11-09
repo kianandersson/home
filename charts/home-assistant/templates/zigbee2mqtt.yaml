@@ -16,7 +16,7 @@ metadata:
   name: zigbee2mqtt-config
   namespace: home-assistant
 data:
-  configuration.yaml: |-
+  configuration.yaml: |
     homeassistant: true
     permit_join: false
 

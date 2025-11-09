@@ -98,7 +98,7 @@ jobs:
       - name: Prepare certificates
         run: |
           mkdir -p certs
-          kubectl get secret local-root-ca-keypair -n cert-manager -o jsonpath='{.data.tls\.crt}' | base64 --decode > certs/local.crt
+          kubectl get secret local-root-ca-keypair -n cert-manager -o jsonpath='{.data.tls\.crt}' | base64 --decode | sed '/^$/d' > certs/local.crt
 
       - name: Validate changes
         env:

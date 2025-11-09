@@ -23,7 +23,7 @@ metadata:
   name: home-assistant-static-config
   namespace: home-assistant
 data:
-  configuration.yaml: |-
+  configuration.yaml: |
 {{ (.Files.Get "files/home-assistant/configuration.yaml") | indent 4 }}
 ---
 apiVersion: apps/v1

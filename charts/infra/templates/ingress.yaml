@@ -96,7 +96,7 @@ metadata:
   name: traefik-dynamic-config
   namespace: kube-system
 data:
-  dynamic.yaml: |-
+  dynamic.yaml: |
     tls:
       certificates:
         - certFile: /certs-public/tls.crt
@@ -119,7 +119,7 @@ metadata:
   name: traefik
   namespace: kube-system
 spec:
-  valuesContent: |-
+  valuesContent: |
     ports:
       ssh:
         port: 22
