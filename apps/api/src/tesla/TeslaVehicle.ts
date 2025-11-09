@@ -10,6 +10,10 @@ export class TeslaVehicle {
     await this.controller.authorize(this);
   }
 
+  public async wake() {
+    await this.controller.wake(this);
+  }
+
   public async unlock() {
     await this.controller.unlock(this);
   }

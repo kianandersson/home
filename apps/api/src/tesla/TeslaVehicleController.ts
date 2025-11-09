@@ -19,6 +19,12 @@ export class TeslaVehicleController {
     ]);
   }
 
+  public async wake(vehicle: TeslaVehicle) {
+    const { privateKeyPath } = this;
+
+    await this.exec(vehicle, ["--key-file", privateKeyPath, "wake"]);
+  }
+
   public async unlock(vehicle: TeslaVehicle) {
     const { privateKeyPath } = this;
 

@@ -73,6 +73,8 @@ function run() {
   const resolvers = {
     Query: {
       async state() {
+        await vehicle.wake();
+
         return JSON.stringify(await vehicle.state());
       },
     },
