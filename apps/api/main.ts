@@ -12,17 +12,29 @@ import {
   type Subscription,
 } from "./src/index.ts";
 
-const env = await load({
-  envPath: ".env",
-  export: true,
-});
+try {
+  await load({ export: true });
+} catch {
+  // do nothing
+}
 
-function run() {
+async function run() {
   const binaryPath = "tesla-control";
 
   const keyDir = "./keys";
   const publicKeyPath = `${keyDir}/public.pem`;
   const privateKeyPath = `${keyDir}/private.pem`;
+
+  const publicKey = Deno.env.get("PUBLIC_KEY");
+
+  if (!publicKey) throw new Error("A public key has not been provided");
+
+  const privateKey = Deno.env.get("PRIVATE_KEY");
+
+  if (!privateKey) throw new Error("A private key has not been provided");
+
+  await Deno.writeTextFile(publicKeyPath, publicKey);
+  await Deno.writeTextFile(privateKeyPath, privateKey);
 
   const controller = new TeslaVehicleController(
     binaryPath,
@@ -30,11 +42,16 @@ function run() {
     privateKeyPath
   );
 
-  const { TESLA_VEHICLE_VIN: vehicleVin } = env;
+  const vehicleVin = Deno.env.get("TESLA_VEHICLE_VIN");
+
+  if (!vehicleVin) throw new Error("A vehicle VIN has not been provided");
 
   const vehicle = new TeslaVehicle(controller, vehicleVin);
 
-  const { TESLA_WALL_CONNECTOR_HOST: wallConnectorHost } = env;
+  const wallConnectorHost = Deno.env.get("TESLA_WALL_CONNECTOR_HOST");
+
+  if (!wallConnectorHost)
+    throw new Error("A wall connector host has not been provided");
 
   const wallConnectorUrl = new URL(`http://${wallConnectorHost}`);
   const wallConnector = new TeslaWallConnector(wallConnectorUrl);

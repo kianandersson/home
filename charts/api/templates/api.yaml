@@ -11,6 +11,17 @@ type: kubernetes.io/dockerconfigjson
 data:
   .dockerconfigjson: {{ printf "{\"auths\":{\"%s\":{\"username\":\"%s\",\"password\":\"%s\",\"auth\":\"%s\"}}}" .Values.ghcr.server .Values.ghcr.username .Values.ghcr.password (printf "%s:%s" .Values.ghcr.username .Values.ghcr.password | b64enc) | b64enc }}
 ---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: api-keys
+type: Opaque
+stringData:
+  private.pem: |
+{{ .Values.keys.private | nindent 4 }}
+  public.pem: |
+{{ .Values.keys.public | nindent 4 }}
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -36,18 +47,29 @@ spec:
         - name: ghcr-secret
       containers:
         - name: application
-          image: ghcr.io/kianandersson/api:17
+          image: ghcr.io/kianandersson/api:18
           securityContext:
             privileged: true
           volumeMounts:
             - name: dbus
               mountPath: /run/dbus
+            - name: keys
+              mountPath: /app/keys
+              readOnly: true
           ports:
             - containerPort: 3000
       volumes:
         - name: dbus
           hostPath:
             path: /run/dbus
+        - name: keys
+          secret:
+            secretName: api-keys
+            items:
+              - key: private.pem
+                path: private.pem
+              - key: public.pem
+                path: public.pem
 ---
 apiVersion: v1
 kind: Service

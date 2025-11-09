@@ -19,7 +19,6 @@ WORKDIR /app
 COPY .env .
 COPY deno.json .
 COPY deno.lock .
-COPY keys keys
 COPY src src
 COPY main.ts .
 

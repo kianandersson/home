@@ -7,7 +7,5 @@ jobs:
     runs-on: ubuntu-latest
     container: ghcr.io/catthehacker/ubuntu:act-latest
     steps:
-      - name: Sanity
-        run: docker info
       - uses: actions/checkout@v4
       - run: docker build apps/api -t gitea.anderssonfischer.com/kianandersson/api:latest
