@@ -7,7 +7,7 @@ existingSecretKey: "token"
 
 statefulset:
   actRunner:
-    config: |
+    config: |-
       runner:
         capacity: 5
       container:

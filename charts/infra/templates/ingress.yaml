@@ -5,8 +5,8 @@ metadata:
   namespace: cert-manager
 type: Opaque
 stringData:
-  account-name: {{ .Values.simply.accountName }}
-  api-key: {{ .Values.simply.apiKey }}
+  account-name: "{{ .Values.simply.accountName }}"
+  api-key: "{{ .Values.simply.apiKey }}"
 ---
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
@@ -14,7 +14,7 @@ metadata:
   name: issuer-public
 spec:
   acme:
-    email: {{ .Values.acme.email }}
+    email: "{{ .Values.acme.email }}"
     server: https://acme-v02.api.letsencrypt.org/directory
     privateKeySecretRef:
       name: issuer-public-account-key
@@ -96,7 +96,7 @@ metadata:
   name: traefik-dynamic-config
   namespace: kube-system
 data:
-  dynamic.yaml: |
+  dynamic.yaml: |-
     tls:
       certificates:
         - certFile: /certs-public/tls.crt

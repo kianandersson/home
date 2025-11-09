@@ -4,7 +4,7 @@ metadata:
   name: mosquitto-config
   namespace: home-assistant
 data:
-  mosquitto.conf: |
+  mosquitto.conf: |-
     persistence true
     persistence_location /mosquitto/data/
 
@@ -27,7 +27,7 @@ metadata:
     app: mosquitto
 type: Opaque
 stringData:
-  password.txt: |
+  password.txt: |-
     {{ .Values.mosquitto.username }}:{{ .Values.mosquitto.passwordHash }}
 ---
 apiVersion: v1

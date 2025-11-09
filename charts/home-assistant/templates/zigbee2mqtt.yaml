@@ -16,7 +16,7 @@ metadata:
   name: zigbee2mqtt-config
   namespace: home-assistant
 data:
-  configuration.yaml: |
+  configuration.yaml: |-
     homeassistant: true
     permit_join: false
 
@@ -54,9 +54,9 @@ spec:
             - -c
             - cp -f /config/configuration.yaml /app/data/configuration.yaml
           volumeMounts:
-            - name: config      
+            - name: config
               mountPath: /config
-            - name: data    
+            - name: data
               mountPath: /app/data
       containers:
         - name: zigbee2mqtt

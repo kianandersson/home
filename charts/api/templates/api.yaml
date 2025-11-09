@@ -17,7 +17,7 @@ metadata:
   name: api-certificates
   namespace: api
 data:
-  local.crt: |
+  local.crt: |-
 {{ .Values.certificates.local | nindent 4 }}
 ---
 apiVersion: v1
@@ -26,9 +26,9 @@ metadata:
   name: api-keys
 type: Opaque
 stringData:
-  private.pem: |
+  private.pem: |-
 {{ .Values.keys.private | nindent 4 }}
-  public.pem: |
+  public.pem: |-
 {{ .Values.keys.public | nindent 4 }}
 ---
 apiVersion: apps/v1
@@ -56,7 +56,7 @@ spec:
         - name: registry-secret
       containers:
         - name: application
-          image: {{ .Values.application.image }}
+          image: "{{ .Values.application.image }}"
           securityContext:
             privileged: true
           env:
@@ -67,9 +67,9 @@ spec:
             - name: LOCAL_CERTIFICATE_PATH
               value: /app/certs/local.crt
             - name: TESLA_VEHICLE_VIN
-              value: {{ .Values.tesla.vehicle.vin }}
+              value: "{{ .Values.tesla.vehicle.vin }}"
             - name: TESLA_WALL_CONNECTOR_HOST
-              value: {{ .Values.tesla.wallConnector.host }}
+              value: "{{ .Values.tesla.wallConnector.host }}"
           volumeMounts:
             - name: dbus
               mountPath: /run/dbus
