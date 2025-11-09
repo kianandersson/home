@@ -29,7 +29,7 @@ jobs:
       - name: Prepare keys
         run: |
           mkdir -p keys
-          echo "${{ secrets.API_PRIVATE_KEY }}" > keys/public.pem
+          echo "${{ secrets.API_PUBLIC_KEY }}" > keys/public.pem
           echo "${{ secrets.API_PRIVATE_KEY }}" > keys/private.pem
       - name: Deploy
         # run: |
