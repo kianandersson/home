@@ -7,18 +7,11 @@ jobs:
     runs-on: ubuntu-latest
     container: ghcr.io/catthehacker/ubuntu:act-latest
     steps:
-      - name: Debug 1
-        run: curl -vI https://get.helm.sh/helm-v3.16.1-linux-arm64.tar.gz
-      - name: Debug 2
+      - name: Install Helm 
         run: |
           apt-get update
-          apt-get install -y curl ca-certificates tar
-          update-ca-certificates 
-      - name: Install Helm manually
-        run: |
-          curl -fsSL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
-      - name: Verify Helm
-        run: helm version
+          apt-get install helm
+          helm version
       - name: Login to registry
         uses: docker/login-action@v3
         with:
