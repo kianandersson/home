@@ -8,6 +8,8 @@ existingSecretKey: "token"
 statefulset:
   actRunner:
     config: |
+      runner:
+        capacity: 1
       container:
         valid_volumes:
           - /var/run/docker.sock
