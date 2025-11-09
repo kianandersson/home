@@ -24,12 +24,12 @@ jobs:
             --set simply.accountName="${{ secrets.SIMPLY_ACCOUNT_NAME }}" \
             --set simply.apiKey="${{ secrets.SIMPLY_API_KEY }}" \
 
-      - name: Deploy changes
-        run: |
-          helm upgrade --install infra charts/infra -n infra \
-            -f values/infra/values.yaml \
-            --set simply.accountName="${{ secrets.SIMPLY_ACCOUNT_NAME }}" \
-            --set simply.apiKey="${{ secrets.SIMPLY_API_KEY }}" \
+      # - name: Deploy changes
+      #   run: |
+      #     helm upgrade --install infra charts/infra -n infra \
+      #       -f values/infra/values.yaml \
+      #       --set simply.accountName="${{ secrets.SIMPLY_ACCOUNT_NAME }}" \
+      #       --set simply.apiKey="${{ secrets.SIMPLY_API_KEY }}" \
 
   build-api:
     name: Build and publish api image
