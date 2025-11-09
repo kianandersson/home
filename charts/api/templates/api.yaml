@@ -51,6 +51,10 @@ spec:
           securityContext:
             privileged: true
           env:
+            - name: PRIVATE_KEY_PATH
+              value: /app/keys/private.pem
+            - name: PUBLIC_KEY_PATH
+              value: /app/keys/public.pem
             - name: TESLA_VEHICLE_VIN
               value: {{ .Values.tesla.vehicle.vin }}
             - name: TESLA_WALL_CONNECTOR_HOST

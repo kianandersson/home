@@ -4,8 +4,8 @@ import { TeslaVehicle } from "./TeslaVehicle.ts";
 export class TeslaVehicleController {
   public constructor(
     private readonly binaryPath: string,
-    private readonly publicKeyPath: string,
-    private readonly privateKeyPath: string
+    private readonly privateKeyPath: string,
+    private readonly publicKeyPath: string
   ) {}
 
   public async authorize(vehicle: TeslaVehicle) {

@@ -19,16 +19,23 @@ try {
 }
 
 function run() {
-  const binaryPath = "tesla-control";
+  const binaryPath = Deno.env.get("TESLA_CONTROL_BINARY_PATH");
 
-  const keyDir = "./keys";
-  const publicKeyPath = `${keyDir}/public.pem`;
-  const privateKeyPath = `${keyDir}/private.pem`;
+  if (!binaryPath) throw new Error("A binary path has not been provided");
+
+  const privateKeyPath = Deno.env.get("PRIVATE_KEY_PATH");
+
+  if (!privateKeyPath)
+    throw new Error("A private key path has not been provided");
+
+  const publicKeyPath = Deno.env.get("PUBLIC_KEY_PATH");
+
+  if (!publicKeyPath) throw new Error("A public key has not been provided");
 
   const controller = new TeslaVehicleController(
     binaryPath,
-    publicKeyPath,
-    privateKeyPath
+    privateKeyPath,
+    publicKeyPath
   );
 
   const vehicleVin = Deno.env.get("TESLA_VEHICLE_VIN");

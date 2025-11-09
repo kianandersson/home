@@ -23,4 +23,6 @@ COPY main.ts .
 
 RUN deno cache main.ts
 
+ENV TESLA_CONTROL_BINARY_PATH=tesla-control
+
 ENTRYPOINT ["deno", "run", "--allow-run", "--allow-net", "--allow-read", "--allow-env", "main.ts"]

@@ -88,12 +88,12 @@ jobs:
 
       - name: Prepare keys
         env:
-          API_PUBLIC_KEY: "${{ secrets.API_PUBLIC_KEY }}"
           API_PRIVATE_KEY: "${{ secrets.API_PRIVATE_KEY }}"
+          API_PUBLIC_KEY: "${{ secrets.API_PUBLIC_KEY }}"
         run: |
           mkdir -p keys
-          echo "$API_PUBLIC_KEY" > keys/public.pem
           echo "$API_PRIVATE_KEY" > keys/private.pem
+          echo "$API_PUBLIC_KEY" > keys/public.pem
 
       - name: Validate changes
         env:
