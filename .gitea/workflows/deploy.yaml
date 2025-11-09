@@ -7,7 +7,7 @@ jobs:
     name: Deploy infra release
     runs-on: ubuntu-latest
     container:
-      image: gitea.anderssonfischer.com/kianandersson/runner:2
+      image: gitea.anderssonfischer.com/kianandersson/runner:3
     steps:
       - name: Checkout
         uses: actions/checkout@v5
