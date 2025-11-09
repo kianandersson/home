@@ -1,11 +1,43 @@
 name: Deploy
+
 on: [push]
+
 jobs:
-  deploy-api:
-    name: Deploy API
+  deploy-infra:
+    name: Deploy infra release
     runs-on: ubuntu-latest
     container:
       image: gitea.anderssonfischer.com/kianandersson/runner:2
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Create kubeconfig
+        run: |
+          mkdir -p $HOME/.kube
+          echo "${{ secrets.KUBECONFIG }}" > $HOME/.kube/config
+
+      - name: Validate changes
+        run: |
+          helm diff upgrade infra charts/infra -n infra \
+            -f values/infra/values.yaml \
+            --set simply.accountName="${{ secrets.SIMPLY_ACCOUNT_NAME }}" \
+            --set simply.apiKey="${{ secrets.SIMPLY_API_KEY }}" \
+
+      - name: Deploy changes
+        run: |
+          helm upgrade --install infra charts/infra -n infra \
+            -f values/infra/values.yaml \
+            --set simply.accountName="${{ secrets.SIMPLY_ACCOUNT_NAME }}" \
+            --set simply.apiKey="${{ secrets.SIMPLY_API_KEY }}" \
+
+  build-api:
+    name: Build and publish api image
+    runs-on: ubuntu-latest
+    container:
+      image: gitea.anderssonfischer.com/kianandersson/runner:2
+    outputs:
+      image: ${{ steps.meta.outputs.image }}
     steps:
       - name: Login to registry
         uses: docker/login-action@v3
@@ -13,23 +45,44 @@ jobs:
           registry: gitea.anderssonfischer.com
           username: ${{ secrets.REGISTRY_USERNAME }}
           password: ${{ secrets.REGISTRY_WRITE_TOKEN }}
+
       - name: Checkout
         uses: actions/checkout@v5
+
+      - id: meta
+        name: Set image metadata
+        run: echo "image=gitea.anderssonfischer.com/kianandersson/api:${{ gitea.sha }}" >> "$GITHUB_OUTPUT"
+
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
           push: true
           context: apps/api
-          tags: gitea.anderssonfischer.com/kianandersson/api:${{ gitea.sha }}
+          tags: ${{ steps.meta.outputs.image }}
+
+  deploy-api:
+    name: Deploy api release
+    runs-on: ubuntu-latest
+    needs:
+      - deploy-infra
+      - build-api
+    container:
+      image: gitea.anderssonfischer.com/kianandersson/runner:2
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
       - name: Create kubeconfig
         run: |
           mkdir -p $HOME/.kube
           echo "${{ secrets.KUBECONFIG }}" > $HOME/.kube/config
+
       - name: Prepare keys
         run: |
           mkdir -p keys
           echo "${{ secrets.API_PUBLIC_KEY }}" > keys/public.pem
           echo "${{ secrets.API_PRIVATE_KEY }}" > keys/private.pem
+
       - name: Validate changes
         run: |
           helm diff upgrade api charts/api -n api \
@@ -38,7 +91,8 @@ jobs:
             --set-file keys.public=keys/public.pem \
             --set registry.username="${{ secrets.REGISTRY_USERNAME }}" \
             --set registry.password="${{ secrets.REGISTRY_READ_TOKEN }}" \
-            --set application.image=gitea.anderssonfischer.com/kianandersson/api:${{ gitea.sha }}
+            --set application.image=${{ needs.build-api.outputs.image }}
+
       - name: Deploy changes
         run: |
           helm upgrade --install api charts/api -n api \
@@ -47,4 +101,4 @@ jobs:
             --set-file keys.public=./keys/public.pem \
             --set registry.username="${{ secrets.REGISTRY_USERNAME }}" \
             --set registry.password="${{ secrets.REGISTRY_READ_TOKEN }}" \
-            --set application.image=gitea.anderssonfischer.com/kianandersson/api:${{ gitea.sha }}
+            --set application.image=${{ needs.build-api.outputs.image }}
