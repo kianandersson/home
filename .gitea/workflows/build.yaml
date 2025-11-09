@@ -4,7 +4,7 @@ on: [push]
 
 jobs:
   build:
-    runs-on: docker
+    runs-on: ubuntu-latest
     container:
       image: gitea.anderssonfischer.com/kianandersson/runner:1
     steps:
