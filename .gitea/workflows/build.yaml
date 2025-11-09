@@ -31,21 +31,22 @@ jobs:
           mkdir -p keys
           echo "${{ secrets.API_PUBLIC_KEY }}" > keys/public.pem
           echo "${{ secrets.API_PRIVATE_KEY }}" > keys/private.pem
-      - name: Deploy
-        # run: |
-        #   helm upgrade --install api charts/api -n api \
-        #     -f values/api/values.yaml \
-        #     --set-file keys.private=./keys/private.pem \
-        #     --set-file keys.public=./keys/public.pem \
-        #     --set registry.username="${{ secrets.REGISTRY_USERNAME }}" \
-        #     --set registry.password="${{ secrets.REGISTRY_READ_TOKEN }}" \
-        #     --set application.image=gitea.anderssonfischer.com/kianandersson/api:${{ gitea.sha }}
+      - name: Validate changes
         run: |
           cat keys/public.pem
           helm diff upgrade api charts/api -n api \
             -f values/api/values.yaml \
             --set-file keys.private=keys/private.pem \
             --set-file keys.public=keys/public.pem \
+            --set registry.username="${{ secrets.REGISTRY_USERNAME }}" \
+            --set registry.password="${{ secrets.REGISTRY_READ_TOKEN }}" \
+            --set application.image=gitea.anderssonfischer.com/kianandersson/api:${{ gitea.sha }}
+      - name: Deploy changes
+        run: |
+          helm upgrade --install api charts/api -n api \
+            -f values/api/values.yaml \
+            --set-file keys.private=./keys/private.pem \
+            --set-file keys.public=./keys/public.pem \
             --set registry.username="${{ secrets.REGISTRY_USERNAME }}" \
             --set registry.password="${{ secrets.REGISTRY_READ_TOKEN }}" \
             --set application.image=gitea.anderssonfischer.com/kianandersson/api:${{ gitea.sha }}
