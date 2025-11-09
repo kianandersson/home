@@ -8,8 +8,10 @@ jobs:
     container: ghcr.io/catthehacker/ubuntu:act-latest
     steps:
       - name: Debug 1
-        run: curl https://get.helm.sh/index.yaml
+        run: curl https://google.com
       - name: Debug 2
+        run: curl https://get.helm.sh/index.yaml
+      - name: Debug 3
         run: |
           apt-get update
           apt-get install -y curl ca-certificates tar
