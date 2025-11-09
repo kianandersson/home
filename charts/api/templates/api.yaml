@@ -6,10 +6,10 @@ metadata:
 apiVersion: v1
 kind: Secret
 metadata:
-  name: ghcr-secret
+  name: registry-secret
 type: kubernetes.io/dockerconfigjson
 data:
-  .dockerconfigjson: {{ printf "{\"auths\":{\"%s\":{\"username\":\"%s\",\"password\":\"%s\",\"auth\":\"%s\"}}}" .Values.ghcr.server .Values.ghcr.username .Values.ghcr.password (printf "%s:%s" .Values.ghcr.username .Values.ghcr.password | b64enc) | b64enc }}
+  .dockerconfigjson: {{ printf "{\"auths\":{\"%s\":{\"username\":\"%s\",\"password\":\"%s\",\"auth\":\"%s\"}}}" .Values.registry.server .Values.registry.username .Values.registry.password (printf "%s:%s" .Values.registry.username .Values.registry.password | b64enc) | b64enc }}
 ---
 apiVersion: v1
 kind: Secret
@@ -44,7 +44,7 @@ spec:
     spec:
       hostNetwork: true
       imagePullSecrets:
-        - name: ghcr-secret
+        - name: registry-secret
       containers:
         - name: application
           image: gitea.anderssonfischer.com/kianandersson/api:8885d7834c9d363ab79c5b0923dd78f97db2669f

@@ -1,8 +1,10 @@
-ghcr:
-  server: ghcr.io
+registry:
+  server: ""
   username: ""
   password: ""
 
-keys:
-  private: ""
-  public: ""
+tesla:
+  vehicle:
+    vin: ""
+  wallConnector:
+    host: ""
