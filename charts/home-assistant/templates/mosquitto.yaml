@@ -28,7 +28,7 @@ metadata:
 type: Opaque
 stringData:
   password.txt: |
-    {{ .Values.mosquitto.user }}:{{ .Values.mosquitto.passwordHash }}
+    {{ .Values.mosquitto.username }}:{{ .Values.mosquitto.passwordHash }}
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim

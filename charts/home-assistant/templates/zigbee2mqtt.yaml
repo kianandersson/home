@@ -22,8 +22,8 @@ data:
 
     mqtt:
       server: mqtt://mosquitto-service.home-assistant.svc.cluster.local:8883
-      user: "{{ .Values.mqtt.user }}"
-      password: "{{ .Values.mqtt.password }}"
+      user: "{{ .Values.mosquitto.username }}"
+      password: "{{ .Values.mosquitto.password }}"
 
     serial:
       port: /dev/ttyACM0
