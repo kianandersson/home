@@ -47,7 +47,7 @@ spec:
         - name: ghcr-secret
       containers:
         - name: application
-          image: gitea.anderssonfischer.com/kianandersson/api:b5ad53506e5e32cc0b5726ddd3ae8640258b4fe0
+          image: gitea.anderssonfischer.com/kianandersson/api:8885d7834c9d363ab79c5b0923dd78f97db2669f
           securityContext:
             privileged: true
           env:
