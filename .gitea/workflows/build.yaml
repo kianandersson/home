@@ -8,10 +8,8 @@ jobs:
     container: ghcr.io/catthehacker/ubuntu:act-latest
     steps:
       - name: Debug 1
-        run: curl -v --connect-timeout 10 https://get.helm.sh/index.yaml
-      - name: Debug 2
         run: curl -v -4 --connect-timeout 10 https://get.helm.sh/index.yaml
-      - name: Debug 3
+      - name: Debug 2
         run: |
           apt-get update
           apt-get install -y curl ca-certificates tar
