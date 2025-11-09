@@ -22,14 +22,14 @@ jobs:
           helm diff upgrade infra charts/infra -n infra \
             -f values/infra/values.yaml \
             --set simply.accountName="${{ secrets.SIMPLY_ACCOUNT_NAME }}" \
-            --set simply.apiKey="${{ secrets.SIMPLY_API_KEY }}" \
+            --set simply.apiKey="${{ secrets.SIMPLY_API_KEY }}"
 
-      # - name: Deploy changes
-      #   run: |
-      #     helm upgrade --install infra charts/infra -n infra \
-      #       -f values/infra/values.yaml \
-      #       --set simply.accountName="${{ secrets.SIMPLY_ACCOUNT_NAME }}" \
-      #       --set simply.apiKey="${{ secrets.SIMPLY_API_KEY }}" \
+      - name: Deploy changes
+        run: |
+          helm upgrade --install infra charts/infra -n infra \
+            -f values/infra/values.yaml \
+            --set simply.accountName="${{ secrets.SIMPLY_ACCOUNT_NAME }}" \
+            --set simply.apiKey="${{ secrets.SIMPLY_API_KEY }}"
 
   build-api:
     name: Build and publish api image
@@ -64,7 +64,6 @@ jobs:
     name: Deploy api release
     runs-on: ubuntu-latest
     needs:
-      - deploy-infra
       - build-api
     container:
       image: gitea.anderssonfischer.com/kianandersson/runner:2
@@ -102,3 +101,31 @@ jobs:
             --set registry.username="${{ secrets.REGISTRY_USERNAME }}" \
             --set registry.password="${{ secrets.REGISTRY_READ_TOKEN }}" \
             --set application.image=${{ needs.build-api.outputs.image }}
+
+  deploy-home-assistant:
+    name: Deploy home assistant release
+    runs-on: ubuntu-latest
+    container:
+      image: gitea.anderssonfischer.com/kianandersson/runner:2
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Create kubeconfig
+        run: |
+          mkdir -p $HOME/.kube
+          echo "${{ secrets.KUBECONFIG }}" > $HOME/.kube/config
+
+      - name: Validate changes
+        run: |
+          helm diff upgrade home-assistant charts/home-assistant -n home-assistant \
+            --set mosquitto.username="${{ secrets.MOSQUITTO_USERNAME }}" \
+            --set mosquitto.password="${{ secrets.MOSQUITTO_PASSWORD }}" \
+            --set mosquitto.passwordHash="${{ secrets.MOSQUITTO_PASSWORD_HASH }}"
+
+      # - name: Deploy changes
+      #   run: |
+      #     helm upgrade --install home-assistant charts/home-assistant -n home-assistant \
+      #       --set mosquitto.username="${{ secrets.MOSQUITTO_USERNAME }}" \
+      #       --set mosquitto.password="${{ secrets.MOSQUITTO_PASSWORD }}" \
+      #       --set mosquitto.passwordHash="${{ secrets.MOSQUITTO_PASSWORD_HASH }}"
