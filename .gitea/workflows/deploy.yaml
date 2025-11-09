@@ -156,6 +156,10 @@ jobs:
             --set mosquitto.passwordHash="$MOSQUITTO_PASSWORD_HASH"
 
       - name: Deploy changes
+        env:
+          MOSQUITTO_USERNAME: "${{ secrets.MOSQUITTO_USERNAME }}"
+          MOSQUITTO_PASSWORD: "${{ secrets.MOSQUITTO_PASSWORD }}"
+          MOSQUITTO_PASSWORD_HASH: "${{ secrets.MOSQUITTO_PASSWORD_HASH }}"
         run: |
           helm upgrade --install home-assistant charts/home-assistant -n home-assistant \
             --set mosquitto.username="$MOSQUITTO_USERNAME" \
