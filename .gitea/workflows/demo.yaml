@@ -8,4 +8,5 @@ jobs:
     container: ghcr.io/catthehacker/ubuntu:act-latest
     steps:
       - uses: actions/checkout@v4
-      - run: docker build apps/api -t gitea.anderssonfischer.com/kianandersson/api:latest
+      - run: docker build apps/api -t gitea.anderssonfischer.com/kianandersson/api:${{ gitea.sha_short }}
+      - run: docker push gitea.anderssonfischer.com/kianandersson/api:${{ gitea.sha_short }}
