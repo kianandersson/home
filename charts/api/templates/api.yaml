@@ -47,9 +47,14 @@ spec:
         - name: ghcr-secret
       containers:
         - name: application
-          image: ghcr.io/kianandersson/api:18
+          image: ghcr.io/kianandersson/api:20
           securityContext:
             privileged: true
+          env:
+            - name: TESLA_VEHICLE_VIN
+              value: {{ .Values.tesla.vehicle.vin }}
+            - name: TESLA_WALL_CONNECTOR_HOST
+              value: {{ .Values.tesla.wallConnector.host }}
           volumeMounts:
             - name: dbus
               mountPath: /run/dbus

@@ -16,7 +16,6 @@ COPY --from=tesla-control /usr/local/bin/tesla-control /usr/local/bin/tesla-cont
 
 WORKDIR /app
 
-COPY .env .
 COPY deno.json .
 COPY deno.lock .
 COPY src src

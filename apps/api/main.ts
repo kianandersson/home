@@ -18,23 +18,12 @@ try {
   // do nothing
 }
 
-async function run() {
+function run() {
   const binaryPath = "tesla-control";
 
   const keyDir = "./keys";
   const publicKeyPath = `${keyDir}/public.pem`;
   const privateKeyPath = `${keyDir}/private.pem`;
-
-  const publicKey = Deno.env.get("PUBLIC_KEY");
-
-  if (!publicKey) throw new Error("A public key has not been provided");
-
-  const privateKey = Deno.env.get("PRIVATE_KEY");
-
-  if (!privateKey) throw new Error("A private key has not been provided");
-
-  await Deno.writeTextFile(publicKeyPath, publicKey);
-  await Deno.writeTextFile(privateKeyPath, privateKey);
 
   const controller = new TeslaVehicleController(
     binaryPath,

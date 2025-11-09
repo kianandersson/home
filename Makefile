@@ -4,7 +4,10 @@ deploy:
 		-f values/ingress/values.secrets.yaml
 	
 	helm upgrade --install api charts/api -n api \
+		-f values/api/values.yaml
 		-f values/api/values.secrets.yaml
+		--set-file keys.private=./apps/api/keys/private.pem \
+        --set-file keys.public=./apps/api/keys/public.pem
 
 	helm upgrade --install home-assistant charts/home-assistant -n home-assistant \
 		-f values/home-assistant/values.secrets.yaml
@@ -15,7 +18,10 @@ diff:
 		-f values/ingress/values.secrets.yaml
 
 	helm diff upgrade api charts/api -n api \
-		-f values/api/values.secrets.yaml
+		-f values/api/values.yaml \
+		-f values/api/values.secrets.yaml \
+		--set-file keys.private=./apps/api/keys/private.pem \
+        --set-file keys.public=./apps/api/keys/public.pem
 
 	helm diff upgrade home-assistant charts/home-assistant -n home-assistant \
 		-f values/home-assistant/values.secrets.yaml

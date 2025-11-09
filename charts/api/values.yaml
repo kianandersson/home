@@ -1,2 +1,6 @@
 ghcr:
   server: ghcr.io
+
+keys:
+  private: ""
+  public: ""
