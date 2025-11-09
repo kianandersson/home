@@ -7,7 +7,8 @@ deploy:
 		-f values/api/values.yaml \
 		-f values/api/values.secrets.yaml \
 		--set-file keys.private=./apps/api/keys/private.pem \
-        --set-file keys.public=./apps/api/keys/public.pem
+        --set-file keys.public=./apps/api/keys/public.pem \
+		--set application.image=gitea.anderssonfischer.com/kianandersson/api:8885d7834c9d363ab79c5b0923dd78f97db2669f
 
 	helm upgrade --install home-assistant charts/home-assistant -n home-assistant \
 		-f values/home-assistant/values.secrets.yaml
@@ -21,7 +22,8 @@ diff:
 		-f values/api/values.yaml \
 		-f values/api/values.secrets.yaml \
 		--set-file keys.private=./apps/api/keys/private.pem \
-        --set-file keys.public=./apps/api/keys/public.pem
+        --set-file keys.public=./apps/api/keys/public.pem \
+		--set application.image=gitea.anderssonfischer.com/kianandersson/api:8885d7834c9d363ab79c5b0923dd78f97db2669f
 
 	helm diff upgrade home-assistant charts/home-assistant -n home-assistant \
 		-f values/home-assistant/values.secrets.yaml

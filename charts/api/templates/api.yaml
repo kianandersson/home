@@ -47,7 +47,7 @@ spec:
         - name: registry-secret
       containers:
         - name: application
-          image: gitea.anderssonfischer.com/kianandersson/api:8885d7834c9d363ab79c5b0923dd78f97db2669f
+          image: {{ .Values.application.image }}
           securityContext:
             privileged: true
           env:
