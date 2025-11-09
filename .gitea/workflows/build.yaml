@@ -8,14 +8,15 @@ jobs:
     container:
       image: gitea.anderssonfischer.com/kianandersson/runner:2
     steps:
-      - name: Prepare keys
+      - name: Debug PUBLIC_KEY length
         env:
           PUBLIC_KEY: ${{ secrets.PUBLIC_KEY }}
-          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+        run: echo "Len ${#PUBLIC_KEY}"
+      - name: Prepare keys
         run: |
           mkdir -p keys
-          echo "${PUBLIC_KEY}" > keys/public.pem
-          echo "${PRIVATE_KEY}" > keys/private.pem
+          echo "${{ secrets.PUBLIC_KEY }}" > keys/public.pem
+          echo "${{ secrets.PRIVATE_KEY }}" > keys/private.pem
           cat keys/public.pem
       - name: Login to registry
         uses: docker/login-action@v3
