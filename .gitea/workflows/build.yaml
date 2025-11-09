@@ -1,0 +1,23 @@
+name: Gitea Actions Demo
+run-name: ${{ gitea.actor }} is testing out Gitea Actions 🚀
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: ghcr.io/catthehacker/ubuntu:act-latest
+    steps:
+      - name: Login to registry
+        uses: docker/login-action@v3
+        with:
+          username: ${{ vars.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_TOKEN }}
+      - name: Checkout
+        uses: actions/checkout@v5
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          push: true
+          context: apps/api
+          tags: gitea.anderssonfischer.com/kianandersson/api:${{ gitea.sha }}
+
