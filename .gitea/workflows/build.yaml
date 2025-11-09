@@ -33,7 +33,6 @@ jobs:
           echo "${{ secrets.API_PRIVATE_KEY }}" > keys/private.pem
       - name: Validate changes
         run: |
-          cat keys/public.pem
           helm diff upgrade api charts/api -n api \
             -f values/api/values.yaml \
             --set-file keys.private=keys/private.pem \
