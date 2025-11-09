@@ -58,31 +58,31 @@ spec:
         app: mosquitto
     spec:
       containers:
-      - name: mosquitto
-        image: eclipse-mosquitto
-        ports:
-        - containerPort: 8883
-        - containerPort: 9001
-        volumeMounts:
-        - name: config
-          mountPath: /mosquitto/config/
-        - name: data
-          mountPath: /mosquitto/data/
-        - name: password
-          mountPath: /mosquitto/password/
+        - name: mosquitto
+          image: eclipse-mosquitto
+          ports:
+            - containerPort: 8883
+            - containerPort: 9001
+          volumeMounts:
+            - name: config
+              mountPath: /mosquitto/config/
+            - name: data
+              mountPath: /mosquitto/data/
+            - name: password
+              mountPath: /mosquitto/password/
       volumes:
-      - name: config
-        configMap:
-          name: mosquitto-config
-      - name: data
-        persistentVolumeClaim:
-          claimName: mosquitto-data
-      - name: password
-        secret:
-          secretName: mosquitto-password
-          items:
-            - key: password.txt
-              path: password.txt
+        - name: config
+          configMap:
+            name: mosquitto-config
+        - name: data
+          persistentVolumeClaim:
+            claimName: mosquitto-data
+        - name: password
+          secret:
+            secretName: mosquitto-password
+            items:
+              - key: password.txt
+                path: password.txt
 ---
 apiVersion: v1
 kind: Service
@@ -94,7 +94,7 @@ spec:
   selector:
     app: mosquitto
   ports:
-  - port: 8883
+    - port: 8883
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -103,13 +103,13 @@ metadata:
   namespace: home-assistant
 spec:
   rules:
-  - host: mqtt.anderssonfischer.local
-    http:
-      paths:
-      - pathType: Prefix
-        path: "/"
-        backend:
-          service:
-            name: mosquitto-service
-            port:
-              number: 8883
+    - host: mqtt.anderssonfischer.local
+      http:
+        paths:
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: mosquitto-service
+                port:
+                  number: 8883
