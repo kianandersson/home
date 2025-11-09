@@ -6,6 +6,13 @@ registry:
   username: ""
   password: ""
 
+keys:
+  private: ""
+  public: ""
+
+certificates:
+  local: ""
+
 tesla:
   vehicle:
     vin: ""

@@ -95,6 +95,11 @@ jobs:
           echo "$API_PRIVATE_KEY" > keys/private.pem
           echo "$API_PUBLIC_KEY" > keys/public.pem
 
+      - name: Prepare certificates
+        run: |
+          mkdir -p certs
+          kubectl get secret local-root-ca-keypair -n cert-manager -o jsonpath='{.data.tls\.crt}' | base64 --decode > certs/local.crt
+
       - name: Validate changes
         env:
           REGISTRY_USERNAME: "${{ secrets.REGISTRY_USERNAME }}"
@@ -104,6 +109,7 @@ jobs:
             -f values/api/values.yaml \
             --set-file keys.private=keys/private.pem \
             --set-file keys.public=keys/public.pem \
+            --set-file certificates.local=certs/local.crt \
             --set registry.username="$REGISTRY_USERNAME" \
             --set registry.password="$REGISTRY_READ_TOKEN" \
             --set application.image=${{ needs.build-api.outputs.image }}

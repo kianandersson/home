@@ -5,6 +5,7 @@ import { GraphQLHTTP } from "https://deno.land/x/gql@1.1.2/mod.ts";
 import { gql } from "https://deno.land/x/graphql_tag@0.0.1/mod.ts";
 import { makeExecutableSchema } from "https://deno.land/x/graphql_tools@0.0.2/mod.ts";
 import { load } from "jsr:@std/dotenv";
+import { exists } from "jsr:@std/fs/exists";
 import {
   TeslaVehicle,
   TeslaVehicleController,
@@ -115,6 +116,43 @@ function run() {
 
           return await GraphQLHTTP({ schema })(request);
         }
+        case "/certificates/local":
+          try {
+            const certificateFilePath = Deno.env.get("LOCAL_CERTIFICATE_PATH");
+
+            if (!certificateFilePath)
+              return new Response("A certificate has not been provided", {
+                status: 422,
+              });
+
+            if (!(await exists(certificateFilePath)))
+              throw new Error("Invalid certificate path provided");
+
+            const { isFile, size } = await Deno.stat(certificateFilePath);
+
+            if (!isFile) throw new Error("Invalid certificate path provided");
+
+            const { readable: fileStream } = await Deno.open(
+              certificateFilePath,
+              { read: true }
+            );
+
+            return new Response(fileStream, {
+              status: 200,
+              headers: new Headers({
+                "Content-Type": "application/x-x509-ca-cert",
+                "Content-Disposition": `attachment; filename="certificate.crt"`,
+                "Content-Length": `${size}`,
+              }),
+            });
+          } catch (error) {
+            return new Response(
+              error instanceof Error
+                ? error.message
+                : "An unknown error occurred",
+              { status: 500 }
+            );
+          }
         default:
           return new Response("Not Found", { status: 404 });
       }

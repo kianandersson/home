@@ -1,3 +1,4 @@
+/certs
 /keys
 /node_modules
 .env
