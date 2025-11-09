@@ -7,6 +7,13 @@ jobs:
     runs-on: ubuntu-latest
     container: ghcr.io/catthehacker/ubuntu:act-latest
     steps:
+      - name: Debug 1
+        run: curl https://get.helm.sh/index.yaml
+      - name: Debug 2
+        run: |
+          apt-get update
+          apt-get install -y curl ca-certificates tar
+          update-ca-certificates 
       - name: Install Helm manually
         run: |
           curl -fsSL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
