@@ -126,9 +126,9 @@ jobs:
           echo ${#MOSQUITTO_PASSWORD}
           echo ${#MOSQUITTO_PASSWORD_HASH}
           helm diff upgrade home-assistant charts/home-assistant -n home-assistant \
-            --set mosquitto.username="${{ secrets.MOSQUITTO_USERNAME }}" \
-            --set mosquitto.password="${{ secrets.MOSQUITTO_PASSWORD }}" \
-            --set mosquitto.passwordHash="${{ secrets.MOSQUITTO_PASSWORD_HASH }}"
+            --set mosquitto.username="$MOSQUITTO_USERNAME" \
+            --set mosquitto.password="$MOSQUITTO_PASSWORD" \
+            --set mosquitto.passwordHash="$MOSQUITTO_PASSWORD_HASH"
 
       # - name: Deploy changes
       #   run: |
