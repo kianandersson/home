@@ -1,5 +1,7 @@
 ghcr:
   server: ghcr.io
+  username: ""
+  password: ""
 
 keys:
   private: ""
