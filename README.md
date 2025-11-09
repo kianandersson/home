@@ -2,6 +2,27 @@
 
 ## Recover node
 
+### Install Ubuntu Server
+
+- [86_64](https://ubuntu.com/download/server)
+- [Raspberry Pi](https://ubuntu.com/download/raspberry-pi)
+
+### Update dependencies
+
+```sh
+sudo apt update
+sudo apt full-upgrade -y
+sudo reboot
+```
+
+### Enable bluetooth
+
+```sh
+sudo apt install -y bluez dbus
+sudo systemctl enable bluetooth
+sudo systemctl start bluetooth
+```
+
 ### Install K3s
 
 ```sh
