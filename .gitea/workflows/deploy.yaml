@@ -43,7 +43,7 @@ jobs:
     name: Build and publish api image
     runs-on: ubuntu-latest
     container:
-      image: gitea.anderssonfischer.com/kianandersson/runner:2
+      image: gitea.anderssonfischer.com/kianandersson/runner:3
     outputs:
       image: ${{ steps.meta.outputs.image }}
     steps:
@@ -74,7 +74,7 @@ jobs:
     needs:
       - build-api
     container:
-      image: gitea.anderssonfischer.com/kianandersson/runner:2
+      image: gitea.anderssonfischer.com/kianandersson/runner:3
     steps:
       - name: Checkout
         uses: actions/checkout@v5
@@ -131,7 +131,7 @@ jobs:
     name: Deploy home assistant release
     runs-on: ubuntu-latest
     container:
-      image: gitea.anderssonfischer.com/kianandersson/runner:2
+      image: gitea.anderssonfischer.com/kianandersson/runner:3
     steps:
       - name: Checkout
         uses: actions/checkout@v5
