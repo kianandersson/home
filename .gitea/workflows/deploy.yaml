@@ -90,7 +90,9 @@ jobs:
           echo "$KUBECONFIG" > $HOME/.kube/config
 
       - name: Build helm chart dependencies
-        run: helm dependency build ./charts/velero
+        run: |
+          helm repo add https://vmware-tanzu.github.io/helm-charts
+          helm dependency build ./charts/velero
 
       - name: Validate changes
         env:

@@ -23,6 +23,19 @@ sudo systemctl enable bluetooth
 sudo systemctl start bluetooth
 ```
 
+### Mount data disk
+
+```sh
+sudo mkdir -p /mnt/data
+sudo mount /dev/sda1 /mnt/data
+```
+
+### Mount data disk on boot
+
+```sh
+uuid=$(blkid -s UUID -o value /dev/sda1) && grep -q "$uuid" /etc/fstab || echo "UUID=$uuid /mnt/data ext4 defaults,noatime,nofail,x-systemd.device-timeout=5s 0 2" | sudo tee -a /etc/fstab
+```
+
 ### Install K3s
 
 ```sh
