@@ -100,7 +100,6 @@ jobs:
           S3_PASSWORD: "${{ secrets.S3_PASSWORD }}"
         run: |
           helm diff upgrade velero charts/velero -n velero \
-            -f values/velero/values.yaml \
             --set simply.accountName="$S3_USERNAME" \
             --set simply.apiKey="$S3_USERNAME"
 
@@ -110,7 +109,6 @@ jobs:
           S3_PASSWORD: "${{ secrets.S3_PASSWORD }}"
         run: |
           helm upgrade --install velero charts/velero -n velero \
-            -f values/velero/values.yaml \
             --set username="$S3_USERNAME" \
             --set password="$S3_PASSWORD"
 
