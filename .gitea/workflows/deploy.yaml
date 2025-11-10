@@ -91,7 +91,7 @@ jobs:
 
       - name: Build helm chart dependencies
         run: |
-          helm repo add https://vmware-tanzu.github.io/helm-charts
+          helm repo add vmware-tanzu https://vmware-tanzu.github.io/helm-charts
           helm dependency build ./charts/velero
 
       - name: Validate changes
