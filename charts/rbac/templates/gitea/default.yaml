@@ -18,14 +18,9 @@ kind: ClusterRole
 metadata:
   name: gitea-runner-cluster-role
 rules:
-  - apiGroups: [""]
-    resources:
-      - namespaces
-    verbs: ["get", "list"]
-  - apiGroups: ["cert-manager.io"]
-    resources:
-      - clusterissuers
-    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  - apiGroups: ["*"]
+    resources: ["*"]
+    verbs: ["*"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
