@@ -39,6 +39,79 @@ jobs:
             --set simply.accountName="$SIMPLY_ACCOUNT_NAME" \
             --set simply.apiKey="$SIMPLY_API_KEY"
 
+  deploy-s3:
+    name: Deploy s3 release
+    runs-on: ubuntu-latest
+    container:
+      image: gitea.anderssonfischer.com/kianandersson/runner:3
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Create kubeconfig
+        env:
+          KUBECONFIG: "${{ secrets.KUBECONFIG }}"
+        run: |
+          mkdir -p $HOME/.kube
+          echo "$KUBECONFIG" > $HOME/.kube/config
+
+      - name: Validate changes
+        env:
+          S3_USERNAME: "${{ secrets.S3_USERNAME }}"
+          S3_PASSWORD: "${{ secrets.S3_PASSWORD }}"
+        run: |
+          helm diff upgrade s3 charts/s3 -n s3 \
+            --set username="$S3_USERNAME" \
+            --set password="$S3_PASSWORD"
+
+      - name: Deploy changes
+        env:
+          SIMPLY_ACCOUNT_NAME: "${{ secrets.SIMPLY_ACCOUNT_NAME }}"
+          SIMPLY_API_KEY: "${{ secrets.SIMPLY_API_KEY }}"
+        run: |
+          helm upgrade --install s3 charts/s3 -n s3 \
+            --set username="$S3_USERNAME" \
+            --set password="$S3_PASSWORD"
+
+  deploy-velero:
+    name: Deploy velero release
+    runs-on: ubuntu-latest
+    container:
+      image: gitea.anderssonfischer.com/kianandersson/runner:3
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Create kubeconfig
+        env:
+          KUBECONFIG: "${{ secrets.KUBECONFIG }}"
+        run: |
+          mkdir -p $HOME/.kube
+          echo "$KUBECONFIG" > $HOME/.kube/config
+
+      - name: Build helm chart dependencies
+        run: helm dependency build ./charts/velero
+
+      - name: Validate changes
+        env:
+          S3_USERNAME: "${{ secrets.S3_USERNAME }}"
+          S3_PASSWORD: "${{ secrets.S3_PASSWORD }}"
+        run: |
+          helm diff upgrade velero charts/velero -n velero \
+            -f values/velero/values.yaml \
+            --set simply.accountName="$S3_USERNAME" \
+            --set simply.apiKey="$S3_USERNAME"
+
+      - name: Deploy changes
+        env:
+          S3_USERNAME: "${{ secrets.S3_USERNAME }}"
+          S3_PASSWORD: "${{ secrets.S3_PASSWORD }}"
+        run: |
+          helm upgrade --install velero charts/velero -n velero \
+            -f values/velero/values.yaml \
+            --set username="$S3_USERNAME" \
+            --set password="$S3_PASSWORD"
+
   build-api:
     name: Build and push api image
     runs-on: ubuntu-latest

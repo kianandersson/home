@@ -1,0 +1,39 @@
+s3:
+  username: ""
+  password: ""
+
+velero:
+  configuration:
+    backupStorageLocation:
+      - name: default
+        provider: aws
+        bucket: velero
+        default: true
+        config:
+          region: minio
+          s3ForcePathStyle: true
+          s3Url: http://s3.anderssonfischer.com
+    volumeSnapshotLocation: []
+    defaultVolumesToFsBackup: true
+
+  credentials:
+    useSecret: true
+    existingSecret: velero-credentials
+
+  initContainers:
+    - name: velero-plugin-for-aws
+      image: velero/velero-plugin-for-aws:v1.9.0
+      volumeMounts:
+        - mountPath: /target
+          name: plugins
+
+  deployNodeAgent: true
+
+  schedules:
+    daily:
+      schedule: "0 3 * * *"
+      template:
+        ttl: "336h"
+        storageLocation: default
+        includedNamespaces:
+          - "*"
