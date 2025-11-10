@@ -2,19 +2,18 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   name: gitea-runner-role
-  namespace: s3
+  namespace: velero
 rules:
   - apiGroups: [""]
     resources:
       - secrets
-      - services
     verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: gitea-runner-binding
-  namespace: s3
+  namespace: velero
 subjects:
   - kind: ServiceAccount
     name: gitea-runner
