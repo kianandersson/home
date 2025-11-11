@@ -39,40 +39,6 @@ jobs:
             --set simply.accountName="$SIMPLY_ACCOUNT_NAME" \
             --set simply.apiKey="$SIMPLY_API_KEY"
 
-  deploy-s3:
-    name: Deploy s3 release
-    runs-on: ubuntu-latest
-    container:
-      image: gitea.anderssonfischer.com/kianandersson/runner:3
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v5
-
-      - name: Create kubeconfig
-        env:
-          KUBECONFIG: "${{ secrets.KUBECONFIG }}"
-        run: |
-          mkdir -p $HOME/.kube
-          echo "$KUBECONFIG" > $HOME/.kube/config
-
-      - name: Validate changes
-        env:
-          S3_USERNAME: "${{ secrets.S3_USERNAME }}"
-          S3_PASSWORD: "${{ secrets.S3_PASSWORD }}"
-        run: |
-          helm diff upgrade s3 charts/s3 -n s3 \
-            --set username="$S3_USERNAME" \
-            --set password="$S3_PASSWORD"
-
-      - name: Deploy changes
-        env:
-          SIMPLY_ACCOUNT_NAME: "${{ secrets.SIMPLY_ACCOUNT_NAME }}"
-          SIMPLY_API_KEY: "${{ secrets.SIMPLY_API_KEY }}"
-        run: |
-          helm upgrade --install s3 charts/s3 -n s3 \
-            --set username="$S3_USERNAME" \
-            --set password="$S3_PASSWORD"
-
   deploy-velero:
     name: Deploy velero release
     runs-on: ubuntu-latest
@@ -89,28 +55,27 @@ jobs:
           mkdir -p $HOME/.kube
           echo "$KUBECONFIG" > $HOME/.kube/config
 
+      - name: Prepare GCP credentials
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}"
+        run: |
+          mkdir -p gcp
+          echo "$GOOGLE_APPLICATION_CREDENTIALS" > gcp/credentials.json
+
       - name: Build helm chart dependencies
         run: |
           helm repo add vmware-tanzu https://vmware-tanzu.github.io/helm-charts
-          helm dependency build ./charts/velero
+          helm dependency build charts/velero
 
       - name: Validate changes
-        env:
-          S3_USERNAME: "${{ secrets.S3_USERNAME }}"
-          S3_PASSWORD: "${{ secrets.S3_PASSWORD }}"
         run: |
           helm diff upgrade velero charts/velero -n velero \
-            --set simply.accountName="$S3_USERNAME" \
-            --set simply.apiKey="$S3_USERNAME"
+            --set-file credentials.gcp=gcp/credentials.json
 
       - name: Deploy changes
-        env:
-          S3_USERNAME: "${{ secrets.S3_USERNAME }}"
-          S3_PASSWORD: "${{ secrets.S3_PASSWORD }}"
         run: |
           helm upgrade --install velero charts/velero -n velero \
-            --set username="$S3_USERNAME" \
-            --set password="$S3_PASSWORD"
+            --set-file credentials.gcp=gcp/credentials.json
 
   build-api:
     name: Build and push api image
@@ -194,8 +159,8 @@ jobs:
         run: |
           helm upgrade --install api charts/api -n api \
             -f values/api/values.yaml \
-            --set-file keys.private=./keys/private.pem \
-            --set-file keys.public=./keys/public.pem \
+            --set-file keys.private=keys/private.pem \
+            --set-file keys.public=keys/public.pem \
             --set-file certificates.local=certs/local.crt \
             --set registry.username="$REGISTRY_USERNAME" \
             --set registry.password="$REGISTRY_READ_TOKEN" \

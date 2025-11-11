@@ -42,6 +42,10 @@ spec:
                 secretKeyRef:
                   name: s3-credentials
                   key: password
+            - name: MINIO_SERVER_URL
+              value: https://s3.anderssonfischer.com
+            - name: MINIO_BROWSER_REDIRECT_URL
+              value: https://minio.anderssonfischer.com
           ports:
             - containerPort: 9000
             - containerPort: 9001

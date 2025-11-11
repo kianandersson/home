@@ -1,18 +1,15 @@
-s3:
-  username: ""
-  password: ""
+credentials:
+  gcp: ""
 
 velero:
   configuration:
     backupStorageLocation:
       - name: default
-        provider: aws
-        bucket: velero
         default: true
+        provider: gcp
+        bucket: velero.home.anderssonfischer.com
         config:
-          region: minio
-          s3ForcePathStyle: true
-          s3Url: http://s3.anderssonfischer.com
+          region: europe-north1
     volumeSnapshotLocation: []
     defaultVolumesToFsBackup: true
 
