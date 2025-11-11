@@ -8,8 +8,6 @@ velero:
         default: true
         provider: gcp
         bucket: velero.home.anderssonfischer.com
-        config:
-          region: europe-north1
     volumeSnapshotLocation: []
     defaultVolumesToFsBackup: true
 
