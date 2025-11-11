@@ -35,22 +35,22 @@ spec:
             - /data
             - --paa-root-cert-dir
             - /data/credentials
-            # - --bluetooth-adapter
-            # - "1"
+            - --bluetooth-adapter
+            - "1"
           ports:
             - containerPort: 5580
           volumeMounts:
             - name: data
               mountPath: /data
-            # - name: dbus
-            #   mountPath: /run/dbus
+            - name: dbus
+              mountPath: /run/dbus
       volumes:
         - name: data
           persistentVolumeClaim:
             claimName: matter-server-data
-        # - name: dbus
-        #   hostPath:
-        #     path: /run/dbus
+        - name: dbus
+          hostPath:
+            path: /run/dbus
 ---
 apiVersion: v1
 kind: Service
