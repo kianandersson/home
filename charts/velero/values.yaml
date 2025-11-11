@@ -1,5 +1,6 @@
-credentials:
-  gcp: ""
+test:
+  credentials:
+    gcp: ""
 
 velero:
   configuration:

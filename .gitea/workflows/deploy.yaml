@@ -70,12 +70,12 @@ jobs:
       - name: Validate changes
         run: |
           helm diff upgrade velero charts/velero -n velero \
-            --set-file credentials.gcp=gcp/credentials.json
+            --set-file test.credentials.gcp=gcp/credentials.json
 
       - name: Deploy changes
         run: |
           helm upgrade --install velero charts/velero -n velero \
-            --set-file credentials.gcp=gcp/credentials.json
+            --set-file test.credentials.gcp=gcp/credentials.json
 
   build-api:
     name: Build and push api image
