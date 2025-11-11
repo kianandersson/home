@@ -6,4 +6,4 @@ metadata:
 type: Opaque
 stringData:
   cloud: |
-{{ .Values.test.credentials.gcp | nindent 4 }}
+{{ .Values.credentials.gcp | nindent 4 }}
