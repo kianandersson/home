@@ -94,14 +94,26 @@ function run() {
         subscriptions = [
           onConnect(() => console.log("connected")),
           onDisconnect(() => console.log("disconnected")),
-          onPowerStateChange(({ load, produktion, grid, battery }) =>
+          onPowerStateChange(({ load, produktion, grid, battery }) => {
+            const surplus = Math.max(produktion + battery + load, 0);
+            const headroom = 300;
+            const voltage = 230;
+            const phases = 3;
+
+            const amps = Math.max(
+              Math.floor((surplus - headroom) / (voltage * phases)),
+              0
+            );
+
             console.log("power state changed", {
               load,
               produktion,
               grid,
               battery,
-            })
-          ),
+              surplus,
+              amps,
+            });
+          }),
         ];
 
         return true;
