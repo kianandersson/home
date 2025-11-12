@@ -1,3 +1,5 @@
+import { Power } from "../physics/index.ts";
+
 export type FroniusSymoInverterPowerStateProperties = {
   load: number;
   produktion: number;
@@ -15,18 +17,18 @@ export class FroniusSymoInverterPowerState {
   }
 
   public get load() {
-    return this.properties.load;
+    return new Power(this.properties.load);
   }
 
   public get produktion() {
-    return this.properties.produktion;
+    return new Power(this.properties.produktion);
   }
 
   public get grid() {
-    return this.properties.grid;
+    return new Power(this.properties.grid);
   }
 
   public get battery() {
-    return this.properties.battery;
+    return new Power(this.properties.battery);
   }
 }

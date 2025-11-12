@@ -8,11 +8,13 @@ import { load } from "jsr:@std/dotenv";
 import { exists } from "jsr:@std/fs/exists";
 import { FroniusSymoInverter } from "./src/fronius/FroniusSymoInverter.ts";
 import {
+  Power,
   TeslaVehicle,
   TeslaVehicleController,
   TeslaWallConnector,
   type Subscription,
 } from "./src/index.ts";
+import { Current, Voltage } from "./src/physics/index.ts";
 
 try {
   await load({ export: true });
@@ -95,14 +97,21 @@ function run() {
           onConnect(() => console.log("connected")),
           onDisconnect(() => console.log("disconnected")),
           onPowerStateChange(({ load, produktion, grid, battery }) => {
-            const surplus = Math.max(produktion + battery + load, 0);
-            const headroom = 300;
-            const voltage = 230;
+            const surplus = new Power(
+              Math.max(produktion.watts + battery.watts + load.watts, 0)
+            );
+
+            const headroom = new Power(300);
+            const voltage = new Voltage(230);
             const phases = 3;
 
-            const amps = Math.max(
-              Math.floor((surplus - headroom) / (voltage * phases)),
-              0
+            const current = new Current(
+              Math.max(
+                Math.floor(
+                  (surplus.watts - headroom.watts) / (voltage.volts * phases)
+                ),
+                0
+              )
             );
 
             console.log("power state changed", {
@@ -111,7 +120,7 @@ function run() {
               grid,
               battery,
               surplus,
-              amps,
+              current,
             });
           }),
         ];
