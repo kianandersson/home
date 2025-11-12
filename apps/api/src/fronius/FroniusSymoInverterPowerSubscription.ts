@@ -1,34 +1,25 @@
 import { EventEmitter } from "../EventEmitter.ts";
-import { TeslaWallConnectorState } from "./TeslaWallConnectorState.ts";
-import { TeslaWallConnectorStateResolver } from "./TeslaWallConnectorStateResolver.ts";
+import { FroniusSymoInverterPowerState } from "./FroniusSymoInverterPowerState.ts";
+import { FroniusSymoInverterPowerStateResolver } from "./FroniusSymoInverterPowerStateResolver.ts";
 
-export class TeslaWallConnectorSubscription {
-  readonly #connectEventEmitter = new EventEmitter<
+export class FroniusSymoInverterSubscription {
+  readonly #changeEventEmitter = new EventEmitter<
     this,
-    [state: TeslaWallConnectorState]
+    [state: FroniusSymoInverterPowerState]
   >(this);
 
-  readonly #disconnectEventEmitter = new EventEmitter<
-    this,
-    [state: TeslaWallConnectorState]
-  >(this);
-
-  private state?: TeslaWallConnectorState;
+  private state?: FroniusSymoInverterPowerState;
   private controller?: AbortController;
 
-  public get onConnect() {
-    return this.#connectEventEmitter.subscribable;
-  }
-
-  public get onDisconnect() {
-    return this.#disconnectEventEmitter.subscribable;
+  public get onChange() {
+    return this.#changeEventEmitter.subscribable;
   }
 
   public constructor(
-    public readonly resolver: TeslaWallConnectorStateResolver,
+    public readonly resolver: FroniusSymoInverterPowerStateResolver,
     public readonly interval: number
   ) {
-    const emitters = [this.#connectEventEmitter, this.#disconnectEventEmitter];
+    const emitters = [this.#changeEventEmitter];
 
     emitters.forEach((emitter) => {
       emitter.onSubscribe(() => this.subscribe());
@@ -62,11 +53,7 @@ export class TeslaWallConnectorSubscription {
 
           if (!current) continue;
 
-          if (!current.connected && next.connected)
-            this.#connectEventEmitter.emit(next);
-
-          if (current.connected && !next.connected)
-            this.#disconnectEventEmitter.emit(next);
+          this.#changeEventEmitter.emit(next);
         }
       } finally {
         this.unsubscribe();

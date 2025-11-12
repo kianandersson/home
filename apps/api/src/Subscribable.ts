@@ -15,11 +15,11 @@ export interface Subscribable<This, Args extends unknown[] = []>
 }
 
 export type SubscribeFunction<This, Args extends unknown[]> = (
-  listener: Listener<This, Args>,
+  listener: Listener<This, Args>
 ) => void;
 
 export type UnsubscribeFunction<This, Args extends unknown[]> = (
-  listener: Listener<This, Args>,
+  listener: Listener<This, Args>
 ) => void;
 
 export interface SubscribableOptions<This, Args extends unknown[]> {
@@ -54,7 +54,7 @@ export function createSubscribable<This, Args extends unknown[] = []>({
         createSubscribableIterator<Args>(subscribe, unsubscribe),
       [Symbol.asyncIterator]: () =>
         createSubscribableIterator<Args>(subscribe, unsubscribe),
-    },
+    }
   );
 
   return subscribable;
@@ -62,7 +62,7 @@ export function createSubscribable<This, Args extends unknown[] = []>({
 
 function createSubscribableIterator<Args extends unknown[]>(
   subscribe: SubscribeFunction<unknown, Args>,
-  unsubscribe: UnsubscribeFunction<unknown, Args>,
+  unsubscribe: UnsubscribeFunction<unknown, Args>
 ): AsyncIterableIterator<Args> {
   const queue: Args[] = [];
 
@@ -96,10 +96,10 @@ function createSubscribableIterator<Args extends unknown[]>(
       }
     },
 
-    async return(value?: unknown) {
+    return(value?: unknown) {
       unsubscribe(listener);
 
-      return { value, done: true };
+      return Promise.resolve({ value, done: true });
     },
 
     [Symbol.asyncIterator]() {

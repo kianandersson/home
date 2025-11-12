@@ -6,6 +6,7 @@ import { gql } from "https://deno.land/x/graphql_tag@0.0.1/mod.ts";
 import { makeExecutableSchema } from "https://deno.land/x/graphql_tools@0.0.2/mod.ts";
 import { load } from "jsr:@std/dotenv";
 import { exists } from "jsr:@std/fs/exists";
+import { FroniusSymoInverter } from "./src/fronius/FroniusSymoInverter.ts";
 import {
   TeslaVehicle,
   TeslaVehicleController,
@@ -53,7 +54,15 @@ function run() {
   const wallConnectorUrl = new URL(`http://${wallConnectorHost}`);
   const wallConnector = new TeslaWallConnector(wallConnectorUrl);
 
-  const { onConnect, onDisconnect } = wallConnector.subscribe({
+  const inverterHost = "192.168.2.169";
+  const inverterUrl = new URL(`http://${inverterHost}`);
+  const inverter = new FroniusSymoInverter(inverterUrl);
+
+  const { onConnect, onDisconnect } = wallConnector.state.subscribe({
+    interval: 1000,
+  });
+
+  const { onChange: onPowerStateChange } = inverter.powerState.subscribe({
     interval: 1000,
   });
 
@@ -85,6 +94,14 @@ function run() {
         subscriptions = [
           onConnect(() => console.log("connected")),
           onDisconnect(() => console.log("disconnected")),
+          onPowerStateChange(({ load, produktion, grid, battery }) =>
+            console.log("power state changed", {
+              load,
+              produktion,
+              grid,
+              battery,
+            })
+          ),
         ];
 
         return true;

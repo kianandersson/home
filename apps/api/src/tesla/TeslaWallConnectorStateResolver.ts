@@ -2,6 +2,7 @@ import { z } from "zod";
 import { delay } from "../delay.ts";
 import { TeslaWallConnector } from "./TeslaWallConnector.ts";
 import { TeslaWallConnectorState } from "./TeslaWallConnectorState.ts";
+import { TeslaWallConnectorSubscription } from "./TeslaWallConnectorSubscription.ts";
 
 const teslaWallConnectorVitalsSchema = z.object({
   vehicle_connected: z.boolean(),
@@ -16,10 +17,14 @@ export type TeslaWallConnectorWatchStateOptions =
     interval: number;
   };
 
+export type TeslaWallConnectorSubscrioptionOptions = {
+  interval: number;
+};
+
 export class TeslaWallConnectorStateResolver {
   public constructor(private readonly wallConnector: TeslaWallConnector) {}
 
-  public async fetch({
+  public async get({
     signal,
   }: TeslaWallConnectorFetchStateOptions = {}): Promise<TeslaWallConnectorState> {
     const response = await fetch(
@@ -42,7 +47,7 @@ export class TeslaWallConnectorStateResolver {
     while (true) {
       if (signal?.aborted) return;
 
-      const next = await this.fetch({ signal });
+      const next = await this.get({ signal });
 
       if (next.hash !== last?.hash) {
         last = next;
@@ -58,5 +63,9 @@ export class TeslaWallConnectorStateResolver {
         throw error;
       }
     }
+  }
+
+  public subscribe({ interval }: TeslaWallConnectorSubscrioptionOptions) {
+    return new TeslaWallConnectorSubscription(this, interval);
   }
 }
