@@ -127,7 +127,7 @@ jobs:
 
       - name: Prepare docker configuration
         env:
-          REGISTRY_SERVER: ${{ secrets.REGISTRY_SERVER }}
+          REGISTRY_SERVER: gitea.anderssonfischer.com
           REGISTRY_USERNAME: ${{ secrets.REGISTRY_USERNAME }}
           REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
         run: |
