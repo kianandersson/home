@@ -4,7 +4,7 @@ metadata:
   name: registry-secret
 type: kubernetes.io/dockerconfigjson
 data:
-  .dockerconfigjson: {{ .Values.docker.config | quote }}
+  .dockerconfigjson: {{ .Values.docker.config | b64enc | quote }}
 ---
 kind: ConfigMap
 apiVersion: v1
