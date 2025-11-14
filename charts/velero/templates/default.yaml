@@ -5,4 +5,4 @@ metadata:
   namespace: "{{ .Release.Namespace }}"
 type: Opaque
 stringData:
-  cloud: "{{ .Values.credentials.gcp }}"
+  cloud: "{{ .Values.credentials.gcp | fromJson | mustToJson }}"
