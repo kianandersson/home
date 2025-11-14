@@ -172,7 +172,7 @@ jobs:
             --set-file certificates.local=certs/local.crt \
             --set-file keys.private=keys/private.pem \
             --set-file keys.public=keys/public.pem \
-            --set application.image=${{ needs.build-api.outputs.image }}
+            --set application.image="${{ needs.build-api.outputs.image }}"
 
       - name: Deploy changes
         env:
@@ -185,7 +185,7 @@ jobs:
             --set-file certificates.local=certs/local.crt \
             --set-file keys.private=keys/private.pem \
             --set-file keys.public=keys/public.pem \
-            --set application.image=${{ needs.build-api.outputs.image }}
+            --set application.image="${{ needs.build-api.outputs.image }}"
 
   deploy-home-assistant:
     name: Deploy home assistant release

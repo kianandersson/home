@@ -48,7 +48,7 @@ spec:
         - name: registry-secret
       containers:
         - name: application
-          image: {{ .Values.application.image }}
+          image: "{{ .Values.application.image }}"
           securityContext:
             privileged: true
           env:
