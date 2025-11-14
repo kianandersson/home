@@ -48,7 +48,7 @@ spec:
         - name: registry-secret
       containers:
         - name: application
-          image: {{ .Values.application.image }}
+          image: {{ .Values.application.image | quote }}
           securityContext:
             privileged: true
           env:
@@ -59,9 +59,9 @@ spec:
             - name: LOCAL_CERTIFICATE_PATH
               value: /app/certs/local.crt
             - name: TESLA_VEHICLE_VIN
-              value: {{ .Values.tesla.vehicle.vin }}
+              value: {{ .Values.tesla.vehicle.vin | quote }}
             - name: TESLA_WALL_CONNECTOR_HOST
-              value: {{ .Values.tesla.wallConnector.host }}
+              value: {{ .Values.tesla.wallConnector.host | quote }}
           volumeMounts:
             - name: dbus
               mountPath: /run/dbus
