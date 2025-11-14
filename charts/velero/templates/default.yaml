@@ -5,5 +5,4 @@ metadata:
   namespace: "{{ .Release.Namespace }}"
 type: Opaque
 stringData:
-  cloud: |
-{{ .Values.credentials.gcp  | replace "\n" "" | fromJson | toJson | nindent 4 }}
+  cloud: "{{ .Values.credentials.gcp  | replace "\n" "" | fromJson | toJson }}"
