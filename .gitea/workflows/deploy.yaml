@@ -60,6 +60,7 @@ jobs:
           GOOGLE_APPLICATION_CREDENTIALS: "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}"
         run: |
           mkdir -p gcp
+          echo "$GOOGLE_APPLICATION_CREDENTIALS"
           echo "$GOOGLE_APPLICATION_CREDENTIALS" > gcp/credentials.json
           cat gcp/credentials.json
 
