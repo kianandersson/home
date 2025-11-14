@@ -75,7 +75,7 @@ jobs:
       - name: Deploy changes
         run: |
           helm upgrade --install velero charts/velero -n velero \
-            --set application.image="$GOOGLE_APPLICATION_CREDENTIALS"
+            --set-file credentials.gcp=gcp/credentials.json
 
   build-api:
     name: Build and push api image
