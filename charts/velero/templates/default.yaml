@@ -6,4 +6,4 @@ metadata:
 type: Opaque
 stringData:
   cloud: |
-{{ .Values.credentials.gcp  | replace "\\n" "\\\n" | nindent 4 }}
+{{ .Values.credentials.gcp  | nindent 4 }}
