@@ -61,6 +61,7 @@ jobs:
         run: |
           mkdir -p gcp
           echo "$GOOGLE_APPLICATION_CREDENTIALS" > gcp/credentials.json
+          cat gcp/credentials.json
 
       - name: Build helm chart dependencies
         run: |
