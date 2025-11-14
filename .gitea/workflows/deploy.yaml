@@ -129,7 +129,7 @@ jobs:
         env:
           REGISTRY_SERVER: gitea.anderssonfischer.com
           REGISTRY_USERNAME: ${{ secrets.REGISTRY_USERNAME }}
-          REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
+          REGISTRY_PASSWORD: ${{ secrets.REGISTRY_READ_TOKEN }}
         run: |
           mkdir -p docker
 
@@ -168,10 +168,10 @@ jobs:
         run: |
           helm diff upgrade api charts/api -n api \
             -f values/api/values.yaml \
+            --set-file docker.config=docker/config.json \
+            --set-file certificates.local=certs/local.crt \
             --set-file keys.private=keys/private.pem \
             --set-file keys.public=keys/public.pem \
-            --set-file certificates.local=certs/local.crt \
-            --set-file docker.config=docker/config.json \
             --set application.image=${{ needs.build-api.outputs.image }}
 
       - name: Deploy changes
@@ -181,11 +181,10 @@ jobs:
         run: |
           helm upgrade --install api charts/api -n api \
             -f values/api/values.yaml \
+            --set-file docker.config=docker/config.json \
+            --set-file certificates.local=certs/local.crt \
             --set-file keys.private=keys/private.pem \
             --set-file keys.public=keys/public.pem \
-            --set-file certificates.local=certs/local.crt \
-            --set registry.username="$REGISTRY_USERNAME" \
-            --set registry.password="$REGISTRY_READ_TOKEN" \
             --set application.image=${{ needs.build-api.outputs.image }}
 
   deploy-home-assistant:
