@@ -5,4 +5,4 @@ metadata:
   namespace: {{ .Release.Namespace }}
 type: Opaque
 stringData:
-  cloud: {{ .Values.credentials.gcp | b64enc | quote }}
+  cloud: {{ .Values.credentials.gcp | quote }}
