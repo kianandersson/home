@@ -1,6 +1,3 @@
-registry:
-  server: gitea.anderssonfischer.com
-
 tesla:
   vehicle:
     vin: XP7YGCER6RB489251

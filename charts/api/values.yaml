@@ -1,8 +1,8 @@
-application:
-  image: ""
-
 docker:
   config: ""
+
+application:
+  image: ""
 
 keys:
   private: ""

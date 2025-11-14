@@ -4,7 +4,7 @@ metadata:
   name: registry-secret
 type: kubernetes.io/dockerconfigjson
 data:
-  .dockerconfigjson: {{ .Values.docker.config | nindent 4 }}
+  .dockerconfigjson: {{ .Values.docker.config | b64enc | quote }}
 ---
 kind: ConfigMap
 apiVersion: v1
@@ -12,7 +12,7 @@ metadata:
   name: api-certificates
   namespace: api
 data:
-  local.crt: {{ .Values.certificates.local | nindent 4 }}
+  local.crt: {{ .Values.certificates.local | b64enc | quote }}
 ---
 apiVersion: v1
 kind: Secret
@@ -20,8 +20,8 @@ metadata:
   name: api-keys
 type: Opaque
 stringData:
-  private.pem: {{ .Values.keys.private | nindent 4 }}
-  public.pem: {{ .Values.keys.public | nindent 4 }}
+  private.pem: {{ .Values.keys.private | b64enc | quote }}
+  public.pem: {{ .Values.keys.public | b64enc | quote }}
 ---
 apiVersion: apps/v1
 kind: Deployment
