@@ -4,7 +4,7 @@ metadata:
   name: registry-secret
 type: kubernetes.io/dockerconfigjson
 data:
-  .dockerconfigjson: {{ .Values.docker.config | b64enc | quote }}
+  .dockerconfigjson: {{ .Values.docker.config | quote }}
 ---
 kind: ConfigMap
 apiVersion: v1
@@ -12,7 +12,7 @@ metadata:
   name: api-certificates
   namespace: api
 data:
-  local.crt: {{ .Values.certificates.local | b64enc | quote }}
+  local.crt: {{ .Values.certificates.local | quote }}
 ---
 apiVersion: v1
 kind: Secret
@@ -20,8 +20,8 @@ metadata:
   name: api-keys
 type: Opaque
 stringData:
-  private.pem: {{ .Values.keys.private | b64enc | quote }}
-  public.pem: {{ .Values.keys.public | b64enc | quote }}
+  private.pem: {{ .Values.keys.private | quote }}
+  public.pem: {{ .Values.keys.public | quote }}
 ---
 apiVersion: apps/v1
 kind: Deployment
