@@ -125,6 +125,28 @@ jobs:
           mkdir -p $HOME/.kube
           echo "$KUBECONFIG" > $HOME/.kube/config
 
+      - name: Prepare docker configuration
+        env:
+          REGISTRY_SERVER: ${{ secrets.REGISTRY_SERVER }}
+          REGISTRY_USERNAME: ${{ secrets.REGISTRY_USERNAME }}
+          REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
+        run: |
+          mkdir -p docker
+
+          REGISTRY_AUTH=$(printf '%s:%s' "${REGISTRY_USERNAME}" "${REGISTRY_PASSWORD}" | base64 | tr -d '\n')
+
+          cat > docker/config.json <<EOF
+          {
+            "auths": {
+              "${REGISTRY_SERVER}": {
+                "username": "${REGISTRY_USERNAME}",
+                "password": "${REGISTRY_PASSWORD}",
+                "auth": "${REGISTRY_AUTH}"
+              }
+            }
+          }
+          EOF
+
       - name: Prepare keys
         env:
           API_PRIVATE_KEY: "${{ secrets.API_PRIVATE_KEY }}"
@@ -149,8 +171,7 @@ jobs:
             --set-file keys.private=keys/private.pem \
             --set-file keys.public=keys/public.pem \
             --set-file certificates.local=certs/local.crt \
-            --set registry.username="$REGISTRY_USERNAME" \
-            --set registry.password="$REGISTRY_READ_TOKEN" \
+            --set-file docker.config=docker/config.json
             --set application.image=${{ needs.build-api.outputs.image }}
 
       - name: Deploy changes
