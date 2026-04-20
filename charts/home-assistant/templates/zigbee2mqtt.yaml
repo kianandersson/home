@@ -60,7 +60,7 @@ spec:
               mountPath: /app/data
       containers:
         - name: zigbee2mqtt
-          image: koenkk/zigbee2mqtt:2.7
+          image: koenkk/zigbee2mqtt:2.9
           securityContext:
             privileged: true
           ports:
