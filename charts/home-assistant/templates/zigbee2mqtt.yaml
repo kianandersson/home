@@ -99,3 +99,21 @@ spec:
     - port: 80
       targetPort: 8080
       nodePort: 30080
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: zigbee2mqtt-ingress
+  namespace: home-assistant
+spec:
+  rules:
+    - host: zigbee.anderssonfischer.local
+      http:
+        paths:
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: zigbee2mqtt-service
+                port:
+                  number: 8080
