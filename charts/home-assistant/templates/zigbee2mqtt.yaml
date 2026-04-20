@@ -94,10 +94,9 @@ metadata:
 spec:
   selector:
     app: zigbee2mqtt
-  type: NodePort
+  type: LoadBalancer
   ports:
-    - port: 80
-      targetPort: 8080
+    - port: 8080
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -115,4 +114,4 @@ spec:
               service:
                 name: zigbee2mqtt-service
                 port:
-                  number: 80
+                  number: 8080
