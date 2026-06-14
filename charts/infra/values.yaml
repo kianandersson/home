@@ -1,3 +1,2 @@
-simply: 
-  accountName: ""
-  apiKey: ""
+cloudflare:
+  apiToken: ""

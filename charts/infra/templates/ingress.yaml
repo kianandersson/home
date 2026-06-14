@@ -1,12 +1,11 @@
 apiVersion: v1
 kind: Secret
 metadata:
-  name: simply-credentials
+  name: cloudflare-credentials
   namespace: cert-manager
 type: Opaque
 stringData:
-  account-name: {{ .Values.simply.accountName | quote }}
-  api-key: {{ .Values.simply.apiKey | quote }}
+  api-token: {{ .Values.cloudflare.apiToken | quote }}
 ---
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
@@ -20,11 +19,10 @@ spec:
       name: issuer-public-account-key
     solvers:
       - dns01:
-          webhook:
-            groupName: com.github.runnerm.cert-manager-simply-webhook
-            solverName: simply-dns-solver
-            config:
-              secretName: simply-credentials
+          cloudflare:
+            apiTokenSecretRef:
+              name: cloudflare-credentials
+              key: api-token
         selector:
           dnsZones:
             - "anderssonfischer.com"

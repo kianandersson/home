@@ -21,23 +21,19 @@ jobs:
 
       - name: Validate changes
         env:
-          SIMPLY_ACCOUNT_NAME: "${{ secrets.SIMPLY_ACCOUNT_NAME }}"
-          SIMPLY_API_KEY: "${{ secrets.SIMPLY_API_KEY }}"
+          CLOUDFLARE_API_TOKEN: "${{ secrets.CLOUDFLARE_API_TOKEN }}"
         run: |
           helm diff upgrade infra charts/infra -n infra \
             -f values/infra/values.yaml \
-            --set simply.accountName="$SIMPLY_ACCOUNT_NAME" \
-            --set simply.apiKey="$SIMPLY_API_KEY"
+            --set cloudflare.apiToken="$CLOUDFLARE_API_TOKEN"
 
       - name: Deploy changes
         env:
-          SIMPLY_ACCOUNT_NAME: "${{ secrets.SIMPLY_ACCOUNT_NAME }}"
-          SIMPLY_API_KEY: "${{ secrets.SIMPLY_API_KEY }}"
+          CLOUDFLARE_API_TOKEN: "${{ secrets.CLOUDFLARE_API_TOKEN }}"
         run: |
           helm upgrade --install infra charts/infra -n infra \
             -f values/infra/values.yaml \
-            --set simply.accountName="$SIMPLY_ACCOUNT_NAME" \
-            --set simply.apiKey="$SIMPLY_API_KEY"
+            --set cloudflare.apiToken="$CLOUDFLARE_API_TOKEN"
 
   deploy-velero:
     name: Deploy velero release
