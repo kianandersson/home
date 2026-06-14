@@ -51,6 +51,7 @@ TBD...
 ```sh
 helm repo add jetstack https://charts.jetstack.io
 helm repo add simply-dns-webhook https://runnerm.github.io/simply-dns-webhook
+helm repo add emberstack https://emberstack.github.io/helm-charts
 helm repo add gitea-charts https://dl.gitea.com/charts
 ```
 
@@ -76,6 +77,14 @@ helm upgrade --install simply-dns-webhook simply-dns-webhook/simply-dns-webhook 
   --create-namespace \
   --namespace cert-manager \
   --version 1.5.0
+```
+
+### Install Reflector
+
+```sh
+helm upgrade --install reflector emberstack/reflector \
+  --create-namespace \
+  --namespace cert-manager
 ```
 
 ### Install Gitea
