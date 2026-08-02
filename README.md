@@ -50,7 +50,6 @@ TBD...
 
 ```sh
 helm repo add jetstack https://charts.jetstack.io
-helm repo add emberstack https://emberstack.github.io/helm-charts
 helm repo add gitea-charts https://dl.gitea.com/charts
 ```
 
@@ -67,14 +66,6 @@ helm upgrade --install cert-manager jetstack/cert-manager \
   --create-namespace \
   --namespace cert-manager \
   --set installCRDs=true
-```
-
-### Install Reflector
-
-```sh
-helm upgrade --install reflector emberstack/reflector \
-  --create-namespace \
-  --namespace cert-manager
 ```
 
 ### Install Gitea
