@@ -51,28 +51,28 @@ jobs:
           mkdir -p $HOME/.kube
           echo "$KUBECONFIG" > $HOME/.kube/config
 
-      - name: Prepare GCP credentials
-        env:
-          GOOGLE_APPLICATION_CREDENTIALS: "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}"
-        run: |
-          mkdir -p gcp
-          printf "%s" "$GOOGLE_APPLICATION_CREDENTIALS" > gcp/credentials.json
-          cat gcp/credentials.json
-
       - name: Build helm chart dependencies
         run: |
           helm repo add vmware-tanzu https://vmware-tanzu.github.io/helm-charts
           helm dependency build charts/velero
 
       - name: Validate changes
+        env:
+          R2_ACCESS_KEY_ID: "${{ secrets.R2_ACCESS_KEY_ID }}"
+          R2_SECRET_ACCESS_KEY: "${{ secrets.R2_SECRET_ACCESS_KEY }}"
         run: |
           helm diff upgrade velero charts/velero -n velero \
-            --set-file credentials.gcp=gcp/credentials.json
+            --set credentials.accessKeyId="$R2_ACCESS_KEY_ID" \
+            --set credentials.secretAccessKey="$R2_SECRET_ACCESS_KEY"
 
       - name: Deploy changes
+        env:
+          R2_ACCESS_KEY_ID: "${{ secrets.R2_ACCESS_KEY_ID }}"
+          R2_SECRET_ACCESS_KEY: "${{ secrets.R2_SECRET_ACCESS_KEY }}"
         run: |
           helm upgrade --install velero charts/velero -n velero \
-            --set-file credentials.gcp=gcp/credentials.json
+            --set credentials.accessKeyId="$R2_ACCESS_KEY_ID" \
+            --set credentials.secretAccessKey="$R2_SECRET_ACCESS_KEY"
 
   build-api:
     name: Build and push api image

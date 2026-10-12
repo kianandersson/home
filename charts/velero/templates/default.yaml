@@ -5,4 +5,7 @@ metadata:
   namespace: {{ .Release.Namespace }}
 type: Opaque
 stringData:
-  cloud: {{ .Values.credentials.gcp | quote }}
+  cloud: |
+    [default]
+    aws_access_key_id={{ .Values.credentials.accessKeyId }}
+    aws_secret_access_key={{ .Values.credentials.secretAccessKey }}

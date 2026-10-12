@@ -1,23 +1,34 @@
 credentials:
-  gcp: ""
+  accessKeyId: ""
+  secretAccessKey: ""
 
 velero:
   configuration:
     backupStorageLocation:
       - name: default
         default: true
-        provider: gcp
-        bucket: velero.home.anderssonfischer.com
+        provider: aws
+        bucket: velero
+        config:
+          region: auto
+          s3Url: https://f0b50f92e1af569c2719751bd588fdd9.r2.cloudflarestorage.com/velero
+          # R2 rejects the CRC32 checksums the AWS SDK sends by default.
+          checksumAlgorithm: ""
     volumeSnapshotLocation: []
     defaultVolumesToFsBackup: true
+    # Velero polls the bucket every minute and runs Kopia maintenance hourly
+    # per repository by default, which makes Class A operations the dominant cost.
+    backupSyncPeriod: 1h
+    storeValidationFrequency: 1h
+    defaultRepoMaintainFrequency: 24h
 
   credentials:
     useSecret: true
     existingSecret: velero-credentials
 
   initContainers:
-    - name: velero-plugin-for-gcp
-      image: velero/velero-plugin-for-gcp
+    - name: velero-plugin-for-aws
+      image: velero/velero-plugin-for-aws:v1.13.0
       volumeMounts:
         - name: plugins
           mountPath: /target
