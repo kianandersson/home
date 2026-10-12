@@ -11,7 +11,8 @@ velero:
         bucket: velero
         config:
           region: auto
-          s3Url: https://f0b50f92e1af569c2719751bd588fdd9.r2.cloudflarestorage.com/velero
+          s3Url: https://f0b50f92e1af569c2719751bd588fdd9.r2.cloudflarestorage.com
+          s3ForcePathStyle: "true"
           # R2 rejects the CRC32 checksums the AWS SDK sends by default.
           checksumAlgorithm: ""
     volumeSnapshotLocation: []
