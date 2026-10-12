@@ -44,3 +44,5 @@ velero:
         storageLocation: default
         includedNamespaces:
           - "*"
+        excludedNamespaces:
+          - velero
